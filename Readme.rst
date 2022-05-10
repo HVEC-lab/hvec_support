@@ -1,0 +1,1 @@
+This package contains several functions to turbo boost the use of Python in combination with Excel and sqlite.
