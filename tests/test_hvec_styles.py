@@ -5,7 +5,7 @@ HVEC, April 2022
 """
 
 
-import hvec_support.hvec_styles as styles
+import hvec_support.styles as styles
 import pytest as pyt
 
 @pyt.mark.parametrize('lng', ['', 'Dutch', 'English'])

@@ -11,3 +11,12 @@ hvec_support.egg-info/PKG-INFO
 hvec_support.egg-info/requires.txt
 hvec_support.egg-info/SOURCES.txt
 hvec_support.egg-info/top_level.txt
+hvec_support/__pycache__/excel.cpython-310.pyc
+hvec_support/__pycache__/psmsl.cpython-310.pyc
+hvec_support/__pycache__/sqlite.cpython-310.pyc
+hvec_support/__pycache__/styles.cpython-310.pyc
+tests/__pycache__/test_hvec_styles.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_pmsl_import.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_hvec_styles.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_hvec_styles.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_hvec_styles.cpython-310-pytest-7.1.1.pyc
