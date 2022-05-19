@@ -7,8 +7,8 @@ import sqlite3 as sq
 import pandas as pd
 import datetime as dt
 import numpy as np
+import os
 
-# In[210]: Generate range of datetime
 
 def datetime_range(start, end, delta):
     """
@@ -72,4 +72,24 @@ def remove_doubles(cnxn, table, columns):
     
     cnxn.execute(sql, cnxn)
     cnxn.execute("VACUUM")
+    return
+
+
+def store_data(entity, data, log, **kwargs):
+    """
+    Storing data to the default HVEC data infrastructure
+    """    
+    os.chdir(os.getenv('DATAPATH'))
+
+    file = entity + '.db'
+    cnxn = sq.connect(file)
+
+    data.to_sql(
+        'data', cnxn, **kwargs
+        )
+    log.to_sql(
+        'log', cnxn, **kwargs
+        )
+
+    cnxn.close()
     return
