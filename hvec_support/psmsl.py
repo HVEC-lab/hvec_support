@@ -12,6 +12,7 @@ import pandas as pd
 import warnings
 from tqdm import tqdm
 import datetime as dt
+import os
 
 # Company packages
 import hvec_importers.psmsl as psmsl
@@ -26,7 +27,7 @@ def full_import(freq = 'annual', include_metric = False):
         Register every individual import action
         """
         logline = pd.DataFrame()
-        logline['name'] = df['name']
+        logline['name'] = df['name'].unique()
         logline['downloaded'] = dt.datetime.today().strftime('%Y-%m-%d %H:%M')
         logline['source'] = 'Scraped with ' + os.getenv('COMPUTERNAME')
         logline['number of points'] = len(df)
@@ -50,9 +51,9 @@ def full_import(freq = 'annual', include_metric = False):
     for id in tqdm(stations.index):
         type = stations.loc[id, 'type']
         tmp = psmsl.data_single_id(id, freq, type)
-        logline = prepare_log(tmp['name'])
+        logline = prepare_log(tmp)
 
-        if len(df) > 0:
+        if len(tmp) > 0:
             df = pd.concat([df, tmp])
         log = pd.concat([log, logline])    
     return df, log
