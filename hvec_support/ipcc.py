@@ -1,5 +1,5 @@
 """
-Internal booster functions for PSMSL import. 
+Internal booster functions for IPCC import. 
 
 Private collection in addition to hvec_importers.psmsl.
 
@@ -16,12 +16,13 @@ import os
 import time
 
 # Company packages
+import hvec_importers.ipcc as ipcc
 import hvec_importers.psmsl as psmsl
 
 
-def full_import(freq = 'annual', include_metric = False):
+def full_import():
     """
-    Booster importing all PSMSL data. Metric data optional.
+    Booster importing all IPCC sea level scenarios.
     """
     def prepare_log(df, name):
         """
@@ -34,15 +35,8 @@ def full_import(freq = 'annual', include_metric = False):
         logline['number of points'] = len(df)
         return logline
 
-
-    if freq == 'annual' and include_metric:
-        include_metric = False
-        warnings.warn(
-            'Metric data only monthly. include_metric set to False'
-            )
-
-    # Get station list
-    stations = psmsl.station_list(include_metric)
+    # Get station list from PSMSL
+    stations = psmsl.station_list(include_metric = False)
     stations.set_index(keys = 'ID', inplace = True, drop = True)
 
     # For every id in the station list, obtain the data
@@ -50,11 +44,12 @@ def full_import(freq = 'annual', include_metric = False):
     log = pd.DataFrame()
     
     for id in tqdm(stations.index):
-        type = stations.loc[id, 'type']
         name = stations.loc[id, 'Station Name']
 
         time.sleep(1)
-        tmp = psmsl.data_single_id(id, freq, type)
+        tmp = ipcc.data_single_id(id)
+        tmp['name'] = name
+
         logline = prepare_log(tmp, name)
 
         if len(tmp) > 0:
