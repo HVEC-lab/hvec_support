@@ -36,7 +36,7 @@ def full_import():
         return logline
 
     # Get station list from PSMSL
-    stations = psmsl.station_list(include_metric = False)
+    stations = psmsl.station_list(include_metric = True)
     stations.set_index(keys = 'ID', inplace = True, drop = True)
 
     # For every id in the station list, obtain the data
@@ -46,7 +46,7 @@ def full_import():
     for id in tqdm(stations.index):
         name = stations.loc[id, 'Station Name']
 
-        time.sleep(1)
+        time.sleep(2)
         tmp = ipcc.data_single_id(id)
         tmp['name'] = name
 

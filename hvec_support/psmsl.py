@@ -53,7 +53,7 @@ def full_import(freq = 'annual', include_metric = False):
         type = stations.loc[id, 'type']
         name = stations.loc[id, 'Station Name']
 
-        time.sleep(1)
+        time.sleep(2)
         tmp = psmsl.data_single_id(id, freq, type)
         logline = prepare_log(tmp, name)
 
