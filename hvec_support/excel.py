@@ -5,6 +5,8 @@ scripts and excel.
 
 # In[10] Modules
 import openpyxl as xl
+import pandas as pd
+
 
 # In[100] Formatting Excel files
 def set_column_width(worksheet):
@@ -43,4 +45,16 @@ def set_column_width_writer(writer_object):
     for sh in writer_object.sheets:
         worksheet = writer_object.sheets[sh]
         set_column_width(worksheet)
+    return
+
+
+def add_graph_to_writer(writer_object, file, sheetname):
+    """
+    Create new sheet and put a graph on it
+    """
+    pd.DataFrame().to_excel(writer_object, sheet_name = sheetname)
+    worksheet = writer_object.sheets[sheetname]
+    img = xl.drawing.image.Image(file)
+    #img.anchor('A1')
+    worksheet.add_image(img)
     return
