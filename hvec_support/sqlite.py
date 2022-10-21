@@ -32,7 +32,7 @@ def datetime_range(start, end, delta):
 
 def connect(conn_str, *args, **kwargs):
     """ 
-    Convenience method. Connect database and show available tables.
+    Convenience method. Connect existing database and show available tables.
     Verbose version of sq.connect
 
     Args:
@@ -50,6 +50,25 @@ def connect(conn_str, *args, **kwargs):
     print("This database contains the following tables: ")
     print(names)
     return cnxn
+
+
+def initialise(name, path = '', **kwargs):
+    """
+    Initialise a database. If an old version exists, it is deleted.
+    Subsequently the database connection is opened and returned.
+
+    The function assumes an environment variable "DATAPATH" to exist,
+    containing the path to the location used to store data.
+    """
+    if len(path) == 0:
+        path = os.getenv('DATAPATH')
+    
+    try:
+        os.remove(path + name)
+    except FileNotFoundError:
+        pass
+
+    return sq.connect(path + name, **kwargs)
 
 
 def remove_doubles(cnxn, table, columns):
