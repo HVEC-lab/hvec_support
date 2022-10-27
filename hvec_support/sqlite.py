@@ -81,16 +81,12 @@ def remove_doubles(cnxn, table, columns):
         table, string: target table
         columns, list: columns for which doubles are to be avoided
     """
-    sql = (
-        "DELETE FROM '" + table + "'"
-        " WHERE rowid NOT IN ( "
-            "SELECT MIN(rowid) " 
-            "FROM '" + table + "' " 
-            "GROUP BY " + columns +
-            ")")    
-    
-    cnxn.execute(sql, cnxn)
-    cnxn.execute("VACUUM")
+    col_string = ', '.join(columns)
+    subSql = f"SELECT MIN(rowid) FROM {table} GROUP BY {col_string}"
+    sql = f"DELETE FROM {table} WHERE rowid NOT IN ({subSql})"
+
+    cnxn.execute(sql)
+    cnxn.commit()
     return
 
 
