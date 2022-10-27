@@ -6,7 +6,6 @@ Module containing functions supporting the use of sqlite
 import sqlite3 as sq
 import pandas as pd
 import datetime as dt
-import numpy as np
 import os
 
 
