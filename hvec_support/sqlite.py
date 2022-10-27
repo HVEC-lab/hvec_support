@@ -62,7 +62,7 @@ def initialise(name, path = '', **kwargs):
     """
     if len(path) == 0:
         path = os.getenv('DATAPATH')
-    
+
     try:
         os.remove(path + name)
     except FileNotFoundError:
@@ -112,3 +112,24 @@ def store_data(entity, data, log, **kwargs):
 
     cnxn.close()
     return
+
+
+def getTableList(cnxn):
+    """
+    Get list of tables in a database.
+    Input is a database connection object made with sqlite3
+    """
+    sql = 'SELECT name from sqlite_master where type= "table"'
+    tableList = pd.read_sql(sql, cnxn)['name'].tolist()
+    
+    return tableList
+
+
+def getColumnList(cnxn, table):
+    """
+    Get list of columns in a specified table
+    """
+    sql = "SELECT * FROM '%s' ORDER BY ROWID ASC LIMIT 1"%table
+    columnList = pd.read_sql(sql, cnxn)
+
+    return columnList
