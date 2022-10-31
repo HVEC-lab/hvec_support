@@ -27,3 +27,10 @@ hvec_support/bulk_importers/__pycache__/__init__.cpython-310.pyc
 hvec_support/bulk_importers/__pycache__/psmsl.cpython-310.pyc
 .gitignore
 tests/__pycache__/test_hvec_styles.cpython-310-pytest-7.1.3.pyc
+hvec_support/bulk_importers/__pycache__/data_handling.cpython-310.pyc
+hvec_support/bulk_importers/__pycache__/gloss.cpython-310.pyc
+hvec_support/bulk_importers/__pycache__/ipcc.cpython-310.pyc
+hvec_support/bulk_importers/__pycache__/knmi.cpython-310.pyc
+hvec_support/bulk_importers/__pycache__/rws.cpython-310.pyc
+hvec_support/bulk_importers/__pycache__/user_interaction.cpython-310.pyc
+.gitignore
