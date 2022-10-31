@@ -17,12 +17,15 @@ import time
 
 # Company packages
 import hvec_importers.psmsl as psmsl
+from hvec_support.bulk_importers import user_interaction as usr
+from hvec_support.bulk_importers import data_handling as dth
 
 
-def bulk_import(freq = 'annual', include_metric = False):
+def bulk_import(con, stations, freq = 'annual', include_metric = False):
     """
     Booster importing all PSMSL data. Metric data optional.
     """
+    #TODO set logging to standard logging function
     def prepare_log(df, name):
         """
         Register every individual import action
@@ -41,23 +44,18 @@ def bulk_import(freq = 'annual', include_metric = False):
             'Metric data only monthly. include_metric set to False'
             )
 
-    # Get station list
-    stations = psmsl.station_list(include_metric)
-    stations.set_index(keys = 'ID', inplace = True, drop = True)
-
     # For every id in the station list, obtain the data
-    df = pd.DataFrame()
-    log = pd.DataFrame()
-    
     for id in tqdm(stations.index):
+        df = pd.DataFrame()
+        log = pd.DataFrame()
+        
         type = stations.loc[id, 'type']
         name = stations.loc[id, 'name']
 
         time.sleep(5)
-        tmp = psmsl.data_single_id(id, freq, type)
-        logline = prepare_log(tmp, name)
+        df = psmsl.data_single_id(id, freq, type)
+        log = prepare_log(df, name)
 
-        if len(tmp) > 0:
-            df = pd.concat([df, tmp])
-        log = pd.concat([log, logline])    
+        dth.store_data(con, df)
+        dth.write_log(con, log)    
     return df, log
