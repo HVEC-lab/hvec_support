@@ -1,12 +1,13 @@
 """
-Module containing functions supporting the use of sqlite  
+Module containing functions supporting the use of sqlite
 """
 
 # Import general packages
+import os
+import logging
+import datetime as dt
 import sqlite3 as sq
 import pandas as pd
-import datetime as dt
-import os
 
 
 def datetime_range(start, end, delta):
@@ -51,7 +52,7 @@ def connect(conn_str, *args, **kwargs):
     return cnxn
 
 
-def initialise(name, path = '', **kwargs):
+def initialise(name, path = '', replace = True, **kwargs):
     """
     Initialise a database. If an old version exists, it is deleted.
     Subsequently the database connection is opened and returned.
@@ -59,13 +60,15 @@ def initialise(name, path = '', **kwargs):
     The function assumes an environment variable "DATAPATH" to exist,
     containing the path to the location used to store data.
     """
-    if len(path) == 0:
-        path = os.getenv('DATAPATH')
+    logging.info('Initialise database')
 
-    try:
-        os.remove(path + name)
-    except FileNotFoundError:
-        pass
+    if replace:
+        logging.info('Deleting existing database is chosen')
+        try:
+            os.remove(path + name)
+        except FileNotFoundError:
+            logging.info('No existing file found.')
+            pass
 
     return sq.connect(path + name, **kwargs)
 

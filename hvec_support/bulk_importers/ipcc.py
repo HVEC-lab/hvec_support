@@ -20,7 +20,7 @@ import hvec_importers.ipcc as ipcc
 import hvec_importers.psmsl as psmsl
 
 
-def full_import():
+def bulk_import():
     """
     Booster importing all IPCC sea level scenarios.
     """

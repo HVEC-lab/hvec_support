@@ -19,7 +19,7 @@ import time
 import hvec_importers.psmsl as psmsl
 
 
-def full_import(freq = 'annual', include_metric = False):
+def bulk_import(freq = 'annual', include_metric = False):
     """
     Booster importing all PSMSL data. Metric data optional.
     """
@@ -51,9 +51,9 @@ def full_import(freq = 'annual', include_metric = False):
     
     for id in tqdm(stations.index):
         type = stations.loc[id, 'type']
-        name = stations.loc[id, 'Station Name']
+        name = stations.loc[id, 'name']
 
-        time.sleep(2)
+        time.sleep(5)
         tmp = psmsl.data_single_id(id, freq, type)
         logline = prepare_log(tmp, name)
 
