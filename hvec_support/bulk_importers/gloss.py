@@ -12,7 +12,7 @@ import requests
 
 from hvec_importers import gloss
 
-from hvec_support.bulk_importers import user_interaction as usr
+from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
 
 
@@ -39,7 +39,7 @@ def bulk_import(con, stationList):
 
         # Progress information and logging
         name = stationList.loc[nr, 'name']
-        usr.show_progress('GLOSS', name, i + 1, len(stationList), startTime)
+        prg.show_progress('GLOSS', name, i + 1, len(stationList), startTime)
 
         # Get data
         df = gloss.data_single_id(nr, session, type = 'fast_delivery', drop_current_year = True)
@@ -49,7 +49,8 @@ def bulk_import(con, stationList):
 
         # Store data, constits and log
         dth.store_data(con, df)
-        dth.write_log(con, {'dataset': 'gloss', 'id': nr, 'name': name, 'number of points': len(df)})
+        dth.write_log(
+            con, {'dataset': 'gloss', 'id': nr, 'name': name, 'number of points': len(df)})
 
     con.close()
     session.close()
