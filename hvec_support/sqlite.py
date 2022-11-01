@@ -131,3 +131,4 @@ def getColumnList(cnxn, table):
     columnList = pd.read_sql(sql, cnxn)
 
     return columnList
+

@@ -46,4 +46,6 @@ def bulk_import(con, stations):
                 con, {'dataset': 'psmsl', 'id': nr, 'name': name, 'number of points': len(df)})
 
             time.sleep(2)
+
+    session.close()
     return

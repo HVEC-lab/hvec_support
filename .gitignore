@@ -34,3 +34,5 @@ hvec_support/bulk_importers/__pycache__/knmi.cpython-310.pyc
 hvec_support/bulk_importers/__pycache__/rws.cpython-310.pyc
 hvec_support/bulk_importers/__pycache__/user_interaction.cpython-310.pyc
 .gitignore
+hvec_support/interactions/__pycache__/__init__.cpython-310.pyc
+hvec_support/interactions/__pycache__/selectors.cpython-310.pyc

@@ -52,6 +52,5 @@ def bulk_import(con, stationList):
         dth.write_log(
             con, {'dataset': 'gloss', 'id': nr, 'name': name, 'number of points': len(df)})
 
-    con.close()
     session.close()
     return
