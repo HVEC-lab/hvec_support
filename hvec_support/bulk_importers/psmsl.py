@@ -45,7 +45,5 @@ def bulk_import(con, stations):
             dth.write_log(
                 con, {'dataset': 'psmsl', 'id': nr, 'name': name, 'number of points': len(df)})
 
-            time.sleep(2)
-
     session.close()
     return
