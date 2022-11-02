@@ -8,6 +8,7 @@ HVEC lab, 2022
 
 import logging
 import datetime as dt
+import pandas as pd
 import requests
 
 from hvec_importers import gloss
@@ -47,10 +48,16 @@ def bulk_import(con, stationList):
             logging.warning('Empty dataframe found')
             continue
 
-        # Store data, constits and log
-        df.rename(
-            columns = {'station_name': 'name'}
-        )
+        # Data house keeping
+        df.drop(columns = 'station_name', inplace = True)
+        df.set_index(keys = 'gloss_id', inplace = True)
+
+        # Data and station list come from two distinct sources. Hence, only equality
+        # of the gloss_id (used as index) is ensured. Setting the names in the data to
+        # the names in the station list.
+        df['name'] = name
+
+        # Store data and log
         dth.store_data(con, df)
         dth.write_log(
             con, {'dataset': 'gloss', 'id': nr, 'name': name, 'number of points': len(df)})
