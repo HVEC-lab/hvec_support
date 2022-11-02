@@ -52,7 +52,7 @@ def connect_verbose(conn_str, *args, **kwargs):
     return cnxn
 
 
-def initialise(name, path = '', replace = True, **kwargs):
+def initialise(name, replace = True, **kwargs):
     """
     Initialise a database. If an old version exists, it is deleted.
     Subsequently the database connection is opened and returned.
@@ -65,11 +65,11 @@ def initialise(name, path = '', replace = True, **kwargs):
     if replace:
         logging.info('Deleting existing database is chosen')
         try:
-            os.remove(path + name)
+            os.remove(name)
         except FileNotFoundError:
             logging.info('No existing file found.')
 
-    return sq.connect(path + name, **kwargs)
+    return sq.connect(name, **kwargs)
 
 
 def readData(settings, **kwargs):
