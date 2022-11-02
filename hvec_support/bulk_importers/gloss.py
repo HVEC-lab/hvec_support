@@ -48,6 +48,9 @@ def bulk_import(con, stationList):
             continue
 
         # Store data, constits and log
+        df.rename(
+            columns = {'station_name': 'name'}
+        )
         dth.store_data(con, df)
         dth.write_log(
             con, {'dataset': 'gloss', 'id': nr, 'name': name, 'number of points': len(df)})
