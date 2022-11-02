@@ -50,7 +50,7 @@ def bulk_import(con, stationList):
 
         # Data house keeping
         df.drop(columns = 'station_name', inplace = True)
-        df.set_index(keys = 'gloss_id', inplace = True)
+        df.set_index(keys = 'id', inplace = True)
 
         # Data and station list come from two distinct sources. Hence, only equality
         # of the gloss_id (used as index) is ensured. Setting the names in the data to
