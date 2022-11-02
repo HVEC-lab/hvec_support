@@ -46,7 +46,7 @@ def get_inputspecs_field_data():
     # Connect database and choose table
     cnxn = sq.connect(out['file'], detect_types = True)
     tableList = hvsq.getTableList(cnxn)
-    
+
     out['locationTable'] = gui.choicebox(
         msg = 'Pick the table containing metadata of the locations', choices = tableList
     )
