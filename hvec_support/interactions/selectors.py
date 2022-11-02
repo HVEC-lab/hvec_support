@@ -31,12 +31,12 @@ def select_locations(stationList, title = ''):
     return res
 
 
-def get_inputspecs_sq():
+def get_inputspecs_field_data():
     """
-    Specify data selection from a database in sqlite.
+    Specify data selection from a database with field data in sqlite.
     """
 
-    logging.info('Interaction with user')
+    logging.info('Interaction with user getting selection of field data')
     # Choose file
     out = {}
     out['file'] = gui.fileopenbox(msg = 'Data is expected to be in sqlite. Select your input file',
@@ -46,12 +46,18 @@ def get_inputspecs_sq():
     # Connect database and choose table
     cnxn = sq.connect(out['file'], detect_types = True)
     tableList = hvsq.getTableList(cnxn)
-    out['table'] = gui.choicebox(
+    
+    out['locationTable'] = gui.choicebox(
+        msg = 'Pick the table containing metadata of the locations', choices = tableList
+    )
+    tableList.remove(out['locationTable'])  # Prevent double selection of table
+
+    out['dataTable'] = gui.choicebox(
         msg = 'Pick the table containing the data', choices = tableList)
 
     # Create list of columns and specify column names
     #TODO put in loop
-    columnList = hvsq.getColumnList(cnxn, out['table'])
+    columnList = hvsq.getColumnList(cnxn, out['dataTable'])
     out['locationColumn'] = gui.choicebox(
         msg = 'Pick the column containing the location', choices = columnList)
     columnList.remove(out['locationColumn'])
@@ -64,6 +70,6 @@ def get_inputspecs_sq():
         msg = 'Pick the column containing the level', choices = columnList)
     columnList.remove(out['levelColumn'])
 
-    cnxn.close()
+    cnxn.close()  # Prevent side effects by closing database connection
 
     return out
