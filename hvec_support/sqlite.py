@@ -28,9 +28,9 @@ def datetime_range(start, end, delta):
         current += delta
 #        out = np.vstack((out, current))
     return out
-    
 
-def connect(conn_str, *args, **kwargs):
+
+def connect_verbose(conn_str, *args, **kwargs):
     """ 
     Convenience method. Connect existing database and show available tables.
     Verbose version of sq.connect
@@ -68,9 +68,41 @@ def initialise(name, path = '', replace = True, **kwargs):
             os.remove(path + name)
         except FileNotFoundError:
             logging.info('No existing file found.')
-            pass
 
     return sq.connect(path + name, **kwargs)
+
+
+def readData(settings, **kwargs):
+    """
+    Read time series from database.
+
+    Parameters
+    ----------
+    settings: dictionary with at least the fields 'file' and 'table'
+    """
+    #logging.info(f'Read data from {settings['table']} in {settings['file']}')
+
+    # Connect
+    cnxn = sq.connect(settings['file'], **kwargs)
+
+    # Create query 
+    table = settings['table']
+
+    #TODO reinvoke selection of columns if data is very big
+    #keys = ['locationColumn', 'timeColumn', 'levelColumn']
+    #columns = [settings.get(key) for key in keys]
+    var_string = '*' #', '.join(columns)
+
+    sql = f"SELECT {var_string} FROM {table}"
+
+    # Read data
+    data = pd.read_sql(sql, cnxn)
+
+    # Cleanup and close database connection
+    data.dropna(how = 'any', inplace = True)
+    cnxn.close()
+
+    return data
 
 
 def remove_doubles(cnxn, table, columns):
@@ -128,7 +160,6 @@ def getColumnList(cnxn, table):
     Get list of columns in a specified table
     """
     sql = "SELECT * FROM '%s' ORDER BY ROWID ASC LIMIT 1"%table
-    columnList = pd.read_sql(sql, cnxn)
+    columnList = pd.read_sql(sql, cnxn).columns.tolist()
 
     return columnList
-
