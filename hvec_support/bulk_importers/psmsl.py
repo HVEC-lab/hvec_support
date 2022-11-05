@@ -27,6 +27,7 @@ def bulk_import(con, stations):
 
     startTime = dt.datetime.now()
     session = requests.session()
+    log_base = 'PSMSL automatic download'
 
     for freq in freqs:
 
@@ -43,7 +44,9 @@ def bulk_import(con, stations):
 
             dth.store_data(con, df)
             dth.write_log(
-                con, {'dataset': 'psmsl', 'id': nr, 'name': name, 'number of points': len(df)})
+                    entry = f'{log_base}. Station: {nr}, {name}; '
+                            f'freq = {freq}. Number of point: {len(df)}',
+                    cnxn = con)
 
     session.close()
     return

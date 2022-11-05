@@ -14,3 +14,4 @@ from .bulk_importers import psmsl
 from .bulk_importers import rws
 from .bulk_importers import knmi
 from .bulk_importers import gloss
+from .bulk_importers import data_handling

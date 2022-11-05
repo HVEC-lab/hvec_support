@@ -105,6 +105,37 @@ def readData(settings, **kwargs):
     return data
 
 
+def prepare_logLine(entry):
+    """
+    Store log information on current download action to
+    a dataframe.
+
+    Parameters
+    ------
+    entry: string with log info
+    cnt: number of stored data points
+    """
+    date = dt.datetime.today().strftime('%Y-%m-%d %H:%M')
+    machine = os.getenv('COMPUTERNAME')
+
+    logline = pd.DataFrame(columns = ['date', 'log entry', 'machine'])
+    logline = logline.append(
+        dict(zip(logline.columns,[date, entry, machine])), ignore_index=True)
+    return logline
+
+
+def write_log(entry, cnxn):
+    """
+    Update log in database.
+
+    info is a dictionary with log data. Solved in this way, the log info is flexible.
+    """
+    logline = prepare_logLine(entry)
+    logline.to_sql(con = cnxn, name = 'log', if_exists = 'append', index = False)
+
+    cnxn.commit()
+    return
+
 def remove_doubles(cnxn, table, columns):
     """
     Remove double entries in specified table

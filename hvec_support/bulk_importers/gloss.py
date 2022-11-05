@@ -15,6 +15,7 @@ from hvec_importers import gloss
 
 from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
+from hvec_support import sqlite as hvsq
 
 
 def bulk_import(con, stationList):
@@ -34,6 +35,7 @@ def bulk_import(con, stationList):
     """
     startTime = dt.datetime.now()
     session = requests.session()
+    log_base = 'GLOSS automatic download'
     #TODO: "pythonize" the for loop
 
     for i, nr in enumerate(stationList.index):
@@ -44,23 +46,26 @@ def bulk_import(con, stationList):
 
         # Get data
         df = gloss.data_single_id(nr, session, type = 'fast_delivery', drop_current_year = True)
+
+        # Write log
+        hvsq.write_log(
+            entry = f'{log_base}. Station: {nr}, {name}. Number of points: {len(df)}', cnxn = con)
+
+        # Store data
         if len(df) == 0:
             logging.warning('Empty dataframe found')
             continue
 
         # Data house keeping
-        df.drop(columns = 'station_name', inplace = True)
         df.set_index(keys = 'id', inplace = True)
 
         # Data and station list come from two distinct sources. Hence, only equality
         # of the gloss_id (used as index) is ensured. Setting the names in the data to
         # the names in the station list.
+        df.drop(columns = 'station_name', inplace = True)
         df['name'] = name
 
-        # Store data and log
         dth.store_data(con, df)
-        dth.write_log(
-            con, {'dataset': 'gloss', 'id': nr, 'name': name, 'number of points': len(df)})
 
     session.close()
     return
