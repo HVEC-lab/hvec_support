@@ -86,7 +86,7 @@ def readData(settings, **kwargs):
     cnxn = sq.connect(settings['file'], **kwargs)
 
     # Create query 
-    table = settings['table']
+    table = settings['dataTable']
 
     #TODO reinvoke selection of columns if data is very big
     #keys = ['locationColumn', 'timeColumn', 'levelColumn']
@@ -96,7 +96,7 @@ def readData(settings, **kwargs):
     sql = f"SELECT {var_string} FROM {table}"
 
     # Read data
-    data = pd.read_sql(sql, cnxn)
+    #data = pd.read_sql(sql, cnxn)
 
     # Cleanup and close database connection
     data.dropna(how = 'any', inplace = True)
@@ -182,7 +182,7 @@ def getTableList(cnxn):
     """
     sql = 'SELECT name from sqlite_master where type= "table"'
     tableList = pd.read_sql(sql, cnxn)['name'].tolist()
-    
+
     return tableList
 
 
