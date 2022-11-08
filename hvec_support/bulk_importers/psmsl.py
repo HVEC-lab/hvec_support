@@ -19,11 +19,10 @@ from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
 
 
-def bulk_import(con, stations):
+def bulk_import(con, stations, freqs = ['annual']):
     """
-    Booster importing all PSMSL data. Metric data optional.
+    Booster importing all PSMSL data. 'rlr' data only.
     """
-    freqs = ['annual', 'monthly']
 
     startTime = dt.datetime.now()
     session = requests.session()
