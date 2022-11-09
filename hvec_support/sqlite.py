@@ -135,6 +135,7 @@ def write_log(entry, cnxn):
     cnxn.commit()
     return
 
+
 def remove_doubles(cnxn, table, columns):
     """
     Remove double entries in specified table
