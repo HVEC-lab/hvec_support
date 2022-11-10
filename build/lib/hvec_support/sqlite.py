@@ -196,7 +196,7 @@ def getColumnList(cnxn, table):
     return columnList
 
 #TODO create a tailor-made dataframe object
-def store_with_extra_columns(df, table, cnxn):
+def store_with_column_check(df, table, cnxn, **kwargs):
     """
     1. Get columns in the database
     2. Compare to columns in the results dataframe
@@ -204,7 +204,6 @@ def store_with_extra_columns(df, table, cnxn):
     4. Store dataframe to database
     """
     logging.info('Storing table with added possibly extra columns')
-    df.reset_index(inplace = True)
 
     # Check if table exists
     sql = f'SELECT name FROM sqlite_master WHERE type = "table" AND name = "{table}"'
@@ -212,7 +211,7 @@ def store_with_extra_columns(df, table, cnxn):
 
     if exists:
         # Check for missing columns
-        sql = "PRAGMA table_info(constits)"
+        sql = f"PRAGMA table_info({table})"
         cols_db = pd.read_sql(sql, cnxn)['name'].tolist()
         cols_res = df.columns.tolist()
         missing_columns = list(set(cols_res) - set(cols_db))
@@ -220,9 +219,9 @@ def store_with_extra_columns(df, table, cnxn):
         # Add missing columns
         for col in missing_columns:
             logging.info('')
-            sql = 'ALTER TABLE constits ADD "%s" '%col
+            sql = f'ALTER TABLE {table} ADD "%s" '%col
             cnxn.execute(sql)
 
-    res.to_sql(name = table, con = cnxn, index = True, if_exists = 'append')
+    df.to_sql(name = table, con = cnxn, if_exists = 'append', **kwargs)
     cnxn.commit()
     return
