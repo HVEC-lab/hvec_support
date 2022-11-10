@@ -237,11 +237,27 @@ def store_with_column_check(df, table, cnxn, **kwargs):
     return
 
 
-def db_table_to_csv(name, cnxn, **kwargs):
+def table_to_csv(name, cnxn, **kwargs):
     """
     Integral export of selected table to csv
     """
     sql = f'SELECT * FROM {name}'
     df = pd.read_sql(sql, cnxn)
-    df.to_csv(f'{name}.csv', index = False, sep = ';')
+    df.to_csv(f'{name}.csv', **kwargs)
     return
+
+
+def db_to_csv(cnxn, **kwargs):
+    """
+    Copy all tables in a database to csv
+
+    Args:
+        cnxn: database connection
+    """
+    table_list = getTableList(cnxn)
+    
+    for tbl in table_list:
+        table_to_csv(tbl, cnxn, **kwargs)
+
+    return
+ 

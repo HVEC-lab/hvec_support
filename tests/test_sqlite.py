@@ -35,12 +35,33 @@ def test_store_with_columns_check():
     assert df.equals(df_expected)
 
 
-def test_db_to_csv():
+def test_table_to_csv():
     cnxn = sq.connect(':memory:')
     df1.to_sql('test', cnxn, index = False)
 
-    hvsq.db_table_to_csv('test', cnxn)
+    hvsq.table_to_csv('test', cnxn)
 
     assert os.path.exists('test.csv')
     os.remove('test.csv')
     return
+
+
+def test_db_to_csv():
+    cnxn = sq.connect(':memory:')
+
+    tables = ['test1', 'test2', 'test3']
+
+    for tbl in tables:
+        df1.to_sql(tbl, cnxn)  # Database with three tables
+    cnxn.commit()
+
+    hvsq.db_to_csv(cnxn)
+
+    for tbl in tables:
+        file = f'{tbl}.csv'
+        assert os.path.exists(file)
+        os.remove(file)
+    return
+
+
+
