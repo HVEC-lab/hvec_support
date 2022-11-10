@@ -4,7 +4,7 @@ Tests for the module sqlite
 HVEC, 2022
 """
 
-
+import os
 import pytest as pyt
 import pandas as pd
 import sqlite3 as sq
@@ -12,11 +12,11 @@ import sqlite3 as sq
 from hvec_support import sqlite as hvsq
 
 
+data = {'Name': ['Arthur', 'Merlin', 'Lancelot'], 'Age': [62, 87, 46]}
+df1 = pd.DataFrame(data)
+
+
 def test_store_with_columns_check():
-
-    data = {'Name': ['Arthur', 'Merlin', 'Lancelot'], 'Age': [62, 87, 46]}
-    df1 = pd.DataFrame(data)
-
     data = {'Name': 'Guinevere', 'Role': 'Princess'} # Never ask a lady her age
     df2 = pd.DataFrame(data, index = [0])
 
@@ -33,3 +33,14 @@ def test_store_with_columns_check():
     #df.reset_index(drop = True, inplace = True)
 
     assert df.equals(df_expected)
+
+
+def test_db_to_csv():
+    cnxn = sq.connect(':memory:')
+    df1.to_sql('test', cnxn, index = False)
+
+    hvsq.db_table_to_csv('test', cnxn)
+
+    assert os.path.exists('test.csv')
+    os.remove('test.csv')
+    return

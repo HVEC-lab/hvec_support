@@ -186,6 +186,20 @@ def getTableList(cnxn):
     return tableList
 
 
+def table_exists(table, cnxn):
+    """
+    Verify the existence of a table in a database
+
+    Args:
+        table: string with table name
+        cnxn: database connection
+    Out:
+        Boolean
+    """
+    sql = f'SELECT name FROM sqlite_master WHERE type = "table" AND name = "{table}"'
+    return len(cnxn.execute(sql).fetchall()) == 1
+
+
 def getColumnList(cnxn, table):
     """
     Get list of columns in a specified table
@@ -205,11 +219,7 @@ def store_with_column_check(df, table, cnxn, **kwargs):
     """
     logging.info('Storing table with added possibly extra columns')
 
-    # Check if table exists
-    sql = f'SELECT name FROM sqlite_master WHERE type = "table" AND name = "{table}"'
-    exists = len(cnxn.execute(sql).fetchall()) == 1
-
-    if exists:
+    if table_exists(table, cnxn):
         # Check for missing columns
         sql = f"PRAGMA table_info({table})"
         cols_db = pd.read_sql(sql, cnxn)['name'].tolist()
@@ -224,4 +234,14 @@ def store_with_column_check(df, table, cnxn, **kwargs):
 
     df.to_sql(name = table, con = cnxn, if_exists = 'append', **kwargs)
     cnxn.commit()
+    return
+
+
+def db_table_to_csv(name, cnxn, **kwargs):
+    """
+    Integral export of selected table to csv
+    """
+    sql = f'SELECT * FROM {name}'
+    df = pd.read_sql(sql, cnxn)
+    df.to_csv(f'{name}.csv', index = False, sep = ';')
     return
