@@ -9,7 +9,6 @@ HVEC-lab, May 2022
 
 # Public packages
 import pandas as pd
-import warnings
 from tqdm import tqdm
 import datetime as dt
 import os

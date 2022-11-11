@@ -43,3 +43,5 @@ hvec_support.code-workspace
 tests/__pycache__/test_hvec_styles.cpython-310-pytest-7.2.0.pyc
 tests/__pycache__/test_sqlite.cpython-310-pytest-7.2.0.pyc
 .gitignore
+hvec_support/bulk_importers/__pycache__/show_progress.cpython-310.pyc
+hvec_support/bulk_importers/__pycache__/show_progress.cpython-310.pyc
