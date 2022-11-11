@@ -4,8 +4,8 @@ Module containing functions to support the HVEC housestyle.
 
 # In[10] Modules
 import datetime as dt
-import matplotlib.pyplot as plt
 import locale as loc
+import matplotlib.pyplot as plt
 
 # In[15] Set plot format
 SMALL_SIZE = 16
