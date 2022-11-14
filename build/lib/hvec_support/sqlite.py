@@ -45,7 +45,7 @@ def connect_verbose(conn_str, *args, **kwargs):
     
     sql = "SELECT name FROM sqlite_master WHERE type == 'table' "
     names = pd.read_sql(sql, cnxn)
-    
+
     print("The database ", conn_str, " is opened.")
     print("This database contains the following tables: ")
     print(names)
@@ -258,6 +258,5 @@ def db_to_csv(cnxn, **kwargs):
     
     for tbl in table_list:
         table_to_csv(tbl, cnxn, **kwargs)
-
     return
  
