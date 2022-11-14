@@ -8,7 +8,6 @@ admin = {}
 with open("hvec_support/admin.py") as fp:
     exec(fp.read(), admin)
 
-#TODO include new requirements file
 setup(
     name = 'hvec_support',
     version = admin['__version__'],
@@ -17,13 +16,6 @@ setup(
     description = 'Python package boosting conultancy work '
                 'with Python, sqlite and excel.',
     long_description=long_description,
-#    url='https://github.com/pastas/pastas',
-#    project_urls={
-#        'Source': 'https://github.com/pastas/pastas',
-#        'Documentation': 'http://pastas.readthedocs.io/en/latest/',
-#        'Tracker': 'https://github.com/pastas/pastas/issues',
-#        'Help': 'https://github.com/pastas/pastas/discussions'
-#    },
     license='MIT',
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -45,6 +37,7 @@ setup(
                       'datetime',
                       'easygui',
                       'openpyxl',
-                      'matplotlib'],
+                      'matplotlib',
+                      'hvec_importers @ git+https://github.com/HVEC-lab/hvec_importers'],
     packages=find_packages(exclude=[]),
 )
