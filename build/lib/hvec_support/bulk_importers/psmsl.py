@@ -45,7 +45,7 @@ def bulk_import(con, stations, freqs = ['annual']):
             dth.store_data(con, df)
             hvsq.write_log(
                     entry = f'{log_base}. Station: {nr}, {name}; '
-                            f'freq = {freq}. Number of point: {len(df)}',
+                            f'freq = {freq}. Number of points: {len(df)}',
                     cnxn = con)
 
     session.close()
