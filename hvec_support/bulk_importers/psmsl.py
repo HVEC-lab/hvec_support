@@ -15,6 +15,7 @@ import requests
 
 # Company packages
 from hvec_importers import psmsl
+from hvec_support import sqlite as hvsq
 from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
 
@@ -42,7 +43,7 @@ def bulk_import(con, stations, freqs = ['annual']):
             df['name'] = name
 
             dth.store_data(con, df)
-            dth.write_log(
+            hvsq.write_log(
                     entry = f'{log_base}. Station: {nr}, {name}; '
                             f'freq = {freq}. Number of point: {len(df)}',
                     cnxn = con)
