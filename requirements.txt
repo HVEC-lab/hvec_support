@@ -1,0 +1,8 @@
+datetime
+pandas
+requests
+tqdm
+numpy
+easygui
+openpyxl
+matplotlib

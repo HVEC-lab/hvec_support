@@ -8,6 +8,7 @@ admin = {}
 with open("hvec_support/admin.py") as fp:
     exec(fp.read(), admin)
 
+#TODO include new requirements file
 setup(
     name = 'hvec_support',
     version = admin['__version__'],
@@ -36,7 +37,14 @@ setup(
     platforms='Windows',
     install_requires=['numpy>=1.17',
                       'matplotlib>=3.1',
-                      'pandas>=1.1',
-                      'scipy>=1.3'],
+                      'pandas>=1.5',
+                      'scipy>=1.3',
+                      'openpyxl>=3.0',
+                      'tqdm>=4.0',
+                      'requests>=2.0',
+                      'datetime',
+                      'easygui',
+                      'openpyxl',
+                      'matplotlib'],
     packages=find_packages(exclude=[]),
 )
