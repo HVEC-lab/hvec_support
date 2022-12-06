@@ -147,7 +147,7 @@ def remove_doubles(cnxn, table, columns):
         columns, list: columns for which doubles are to be avoided
     """
     col_string = ', '.join(columns)
-    subSql = f"SELECT MIN(rowid) FROM {table} GROUP BY {col_string}"
+    subSql = f"SELECT MAX(rowid) FROM {table} GROUP BY {col_string}"  # Select last entry
     sql = f"DELETE FROM {table} WHERE rowid NOT IN ({subSql})"
 
     cnxn.execute(sql)
