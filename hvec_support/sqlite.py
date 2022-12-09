@@ -78,7 +78,7 @@ def readData(settings, **kwargs):
 
     Parameters
     ----------
-    settings: dictionary with at least the fields 'file' and 'table'
+    settings: dictionary with at least the fields 'file' and 'dataTable'
     """
     #logging.info(f'Read data from {settings['table']} in {settings['file']}')
 
@@ -88,7 +88,7 @@ def readData(settings, **kwargs):
     # Create query 
     table = settings['dataTable']
 
-    keys = ['locationColumn', 'timeColumn', 'levelColumn']
+    keys = ['locationColumn', 'nameColumn', 'timeColumn', 'levelColumn']
     columns = [settings.get(key) for key in keys]
     var_string = ', '.join(columns)
 
