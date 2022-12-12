@@ -59,8 +59,12 @@ def get_inputspecs_field_data():
     #TODO put in loop
     columnList = hvsq.getColumnList(cnxn, out['dataTable'])
     out['locationColumn'] = gui.choicebox(
-        msg = 'Pick the column containing the location', choices = columnList)
+        msg = 'Pick the column containing the unique location identifier', choices = columnList)
     columnList.remove(out['locationColumn'])
+
+    out['nameColumn'] = gui.choicebox(
+        msg = 'Pick the column containing the location name', choices = columnList)
+    columnList.remove(out['nameColumn'])
 
     out['timeColumn'] = gui.choicebox(
         msg = 'Pick the column containing the time', choices = columnList)

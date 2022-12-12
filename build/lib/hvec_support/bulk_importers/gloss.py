@@ -18,7 +18,7 @@ from hvec_support.bulk_importers import data_handling as dth
 from hvec_support import sqlite as hvsq
 
 
-def bulk_import(con, stationList):
+def bulk_import(con, stationList, type = 'research_quality', drop_current_year = True):
     """
     Function for bulk import of gloss data. To prevent overloading of the site and
     to prevent memory problems, the data is read one location at a time and stored
@@ -45,7 +45,7 @@ def bulk_import(con, stationList):
         prg.show_progress('GLOSS', name, i + 1, len(stationList), startTime)
 
         # Get data
-        df = gloss.data_single_id(nr, session, type = 'fast_delivery', drop_current_year = True)
+        df = gloss.data_single_id(nr, session, type, drop_current_year)
 
         # Write log
         hvsq.write_log(
