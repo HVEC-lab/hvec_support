@@ -43,7 +43,7 @@ def _get_chunk(selection, con):
     global i, N, startTime
 
     name = selection['Naam'].unique().item()
-    quant = selection['Grootheid.Code'].unique().item()
+    quant = selection['Grootheid.Omschrijving'].unique().item()
 
     logging.info(f'Downloading data of {quant} for {name}')
 
