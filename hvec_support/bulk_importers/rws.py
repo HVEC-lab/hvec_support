@@ -42,6 +42,7 @@ def _get_chunk(selection, con):
     """
     global i, N, startTime
 
+    log_base = 'RWS Waterinfo automatic download'
     name = selection['Naam'].unique().item()
     quant = selection['Grootheid.Omschrijving'].unique().item()
 
@@ -74,7 +75,6 @@ def bulk_import(con, stations):
     i = 0
     N = len(stations)
     startTime = dt.datetime.now()
-    log_base = 'RWS Waterinfo automatic download'
 
     stations.reset_index(inplace = True)
     stations['start'] = START
