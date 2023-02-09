@@ -28,44 +28,45 @@ START = '1850-1-1'
 END   = '2100-12-31'
 
 
+def _get_chunk(selection, con):
+    """
+    Support function getting and storing a chunk of data
+    following a single line in the shopping list.
+
+    This function is to be called from a "groupby" statement
+    where we abuse the groupby to select a single row.
+
+    Args:
+        name, quantity: location and quantity as strings
+        con, database connector object
+    """
+    global i, N, startTime
+
+    name = selection['Naam'].unique().item()
+    quant = selection['Grootheid.Code'].unique().item()
+
+    logging.info(f'Downloading data of {quant} for {name}')
+
+    i += 1
+    prg.show_progress(f'RWS Waterinfo {quant}', name, i, N, startTime)
+
+    # Get data
+    df = rws.get_data(selection)
+
+    # Store
+    if len(df) > 0:
+        dth.store_data(con, df)
+
+    # Write data log
+    hvsq.write_log(
+        entry = f'{log_base}. Station: {name}; 'f'Number of points: {len(df)}', cnxn = con)
+    return
+
+
 def bulk_import(con, stations):
     """
     Bulk-importer RWS data.
     """
-    def _get_chunk(selection, con):
-        """
-        Support function getting and storing a chunk of data
-        following a single line in the shopping list.
-
-        This function is to be called from a "groupby" statement
-        where we abuse the groupby to select a single row.
-
-        Args:
-            name, quantity: location and quantity as strings
-            con, database connector object
-        """
-        global i, N, startTime
-
-        name = selection['Naam'].squeeze()
-        quant = selection['Grootheid.Code'].squeeze()
-
-        logging.info(f'Downloading data of {quant} for {name}')
-
-        i += 1
-        prg.show_progress(f'RWS Waterinfo {quant}', name, i, N, startTime)
-
-        # Get data
-        df = rws.get_data(selection)
-
-        # Store
-        if len(df) > 0:
-            dth.store_data(con, df)
-
-        # Write data log
-        hvsq.write_log(
-            entry = f'{log_base}. Station: {name}; 'f'Number of points: {len(df)}', cnxn = con)
-        return
-
     global i, N, startTime
 
     logging.info("Bulk importer for RWS Waterinfo invoked")
@@ -79,6 +80,8 @@ def bulk_import(con, stations):
     stations['start'] = START
     stations['end']   = END
 
+    # Grouping on code instead of name because we use package hvec_importers one
+    # level deeper than the interface
     groups = stations.groupby(by = ['Code', 'Grootheid.Code'], as_index = False)
     groups.apply(lambda x: _get_chunk(x, con = con))
     return
