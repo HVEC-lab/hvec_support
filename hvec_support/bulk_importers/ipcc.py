@@ -19,20 +19,22 @@ import hvec_importers.ipcc as ipcc
 import hvec_importers.psmsl as psmsl
 
 
+def _prepare_log(df, name):
+    """
+    Register every individual import action
+    """
+    logline = pd.DataFrame()
+    logline['name'] = [name]
+    logline['downloaded'] = dt.datetime.today().strftime('%Y-%m-%d %H:%M')
+    logline['source'] = 'Scraped with ' + os.getenv('COMPUTERNAME')
+    logline['number of points'] = len(df)
+    return logline
+
+
 def bulk_import():
     """
     Booster importing all IPCC sea level scenarios.
     """
-    def prepare_log(df, name):
-        """
-        Register every individual import action
-        """
-        logline = pd.DataFrame()
-        logline['name'] = [name]
-        logline['downloaded'] = dt.datetime.today().strftime('%Y-%m-%d %H:%M')
-        logline['source'] = 'Scraped with ' + os.getenv('COMPUTERNAME')
-        logline['number of points'] = len(df)
-        return logline
 
     # Get station list from PSMSL
     stations = psmsl.station_list(include_metric = True)
@@ -49,7 +51,7 @@ def bulk_import():
         tmp = ipcc.data_single_id(id)
         tmp['name'] = name
 
-        logline = prepare_log(tmp, name)
+        logline = _prepare_log(tmp, name)
 
         if len(tmp) > 0:
             df = pd.concat([df, tmp])

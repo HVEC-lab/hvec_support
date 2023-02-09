@@ -12,7 +12,7 @@ import easygui as gui
 from hvec_support import sqlite as hvsq
 
 
-def select_locations(stationList, title = ''):
+def select_locations(stationList, title = '', col_name = 'name'):
     """
     From a list of locations provided on input, manually select a set for further processing.
 
@@ -21,14 +21,14 @@ def select_locations(stationList, title = ''):
     stationList: dataframe with location information
     title: string to show as window title
     """
-    choices = stationList['name'].tolist()
+    choices = stationList[col_name].unique().tolist()
+    choices.sort()
 
     selection = gui.multchoicebox(
         title = title, msg = "Choose locations (more than one allowed)", choices = choices)
 
-    res = stationList.query('name == @selection')
-
-    return res
+    mask = stationList[col_name].isin(selection)
+    return stationList[mask]
 
 
 def get_inputspecs_field_data():
