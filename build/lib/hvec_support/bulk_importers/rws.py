@@ -15,16 +15,23 @@ HVEC lab, 2023
 # Public packages
 import logging
 import datetime as dt
+import requests
+import dateutil
+import time
+from tqdm import tqdm
+import pandas as pd
 
 # Company packages
 # We use the rws-package one level below the user interface
-from hvec_importers.rws import communicators as rws
+from hvec_importers.rws import communicators as rwscom
+from hvec_importers.rws import helpers as rwshlp
+from hvec_importers.rws import parsers as rwsparse
 from hvec_support import sqlite as hvsq
 from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
 
 
-START = '1850-1-1'
+START = '1800-1-1'
 END   = '2100-12-31'
 
 
@@ -40,6 +47,7 @@ def _get_chunk(selection, con):
         name, quantity: location and quantity as strings
         con, database connector object
     """
+    # TODO: use the function for importing slices from hvec_importers. Current version imports too large dataframes and is hence too slow
     global i, N, startTime
 
     log_base = 'RWS Waterinfo automatic download'
@@ -51,16 +59,39 @@ def _get_chunk(selection, con):
     i += 1
     prg.show_progress(f'RWS Waterinfo {quant}', name, i, N, startTime)
 
-    # Get data
-    df = rws.get_data(selection)
+    # Get data using functions from hvec_importers in such a way that
+    # memory use is kept to a minimum
+    session = requests.session()
 
-    # Store
-    if len(df) > 0:
-        dth.store_data(con, df)
+    # Verify availability of any data
+    start = dateutil.parser.parse(selection['start'].squeeze())
+    end = dateutil.parser.parse(selection['end'].squeeze())
+    empty_code = not rwscom.assert_data_available(selection, start, end, session)
+    if empty_code:
+        session.close()
+        return pd.DataFrame()
 
-    # Write data log
-    hvsq.write_log(
-        entry = f'{log_base}. Station: {name}; 'f'Number of points: {len(df)}', cnxn = con)
+    date_range = rwshlp.date_series(START, END)
+
+    for (start_i, end_i) in tqdm(date_range):
+        time.sleep(2)
+        data_present = rwscom.assert_data_available(selection, start_i, end_i, session)
+        if data_present:
+            try:
+                raw = rwscom.get_raw_slice(selection, start_i, end_i, session)
+                clean = rwsparse.parse_data(raw)
+                df = rwsparse.format_data(clean)
+
+            except Exception as e:
+                logging.debug(e)
+                continue
+
+            # Store data
+            dth.store_data(con, df)
+
+            # Write data log
+            hvsq.write_log(
+                entry = f'{log_base}. Station: {name}; 'f'Number of points: {len(df)}', cnxn = con)
     return
 
 

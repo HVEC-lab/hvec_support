@@ -74,7 +74,7 @@ def _get_chunk(selection, con):
     date_range = rwshlp.date_series(START, END)
 
     for (start_i, end_i) in tqdm(date_range):
-        time.sleep(2)
+        time.sleep(1)
         data_present = rwscom.assert_data_available(selection, start_i, end_i, session)
         if data_present:
             try:
