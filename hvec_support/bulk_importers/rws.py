@@ -31,8 +31,8 @@ from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
 
 
-START = '1950-1-1'
-END   = '1955-12-31'
+START = '1800-1-1'
+END   = '2100-12-31'
 
 
 def _get_chunk(selection, con):
