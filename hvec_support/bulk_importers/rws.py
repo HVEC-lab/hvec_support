@@ -33,7 +33,6 @@ from hvec_support.bulk_importers import data_handling as dth
 
 START = '1680-1-1'
 END   = '2100-12-31'
-WAIT = 0
 
 
 def _crude_prune(location, session):
