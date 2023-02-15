@@ -16,24 +16,23 @@ HVEC lab, 2023
 import logging
 import datetime as dt
 import requests
-import dateutil
 import time
 from tqdm import tqdm
-import pandas as pd
 
 # Company packages
 # We use the rws-package one level below the user interface
 from hvec_importers.rws import communicators as rwscom
 from hvec_importers.rws import helpers as rwshlp
 from hvec_importers.rws import parsers as rwsparse
+from hvec_importers.rws.constants import WAIT
 from hvec_support import sqlite as hvsq
 from hvec_support.bulk_importers import show_progress as prg
 from hvec_support.bulk_importers import data_handling as dth
 
 
-START = '1800-1-1'
+START = '1680-1-1'
 END   = '2100-12-31'
-
+WAIT = 0
 
 def _get_chunk(selection, con):
     """
@@ -63,35 +62,25 @@ def _get_chunk(selection, con):
     # memory use is kept to a minimum
     session = requests.session()
 
-    # Verify availability of any data
-    start = dateutil.parser.parse(selection['start'].squeeze())
-    end = dateutil.parser.parse(selection['end'].squeeze())
-    empty_code = not rwscom.assert_data_available(selection, start, end, session)
-    if empty_code:
-        session.close()
-        return pd.DataFrame()
-
     date_range = rwshlp.date_series(START, END)
+    date_range = rwscom.prune_date_range(selection, date_range, session)
 
     for (start_i, end_i) in tqdm(date_range):
-        time.sleep(1)
-        data_present = rwscom.assert_data_available(selection, start_i, end_i, session)
-        if data_present:
-            try:
-                raw = rwscom.get_raw_slice(selection, start_i, end_i, session)
-                clean = rwsparse.parse_data(raw)
-                df = rwsparse.format_data(clean)
+        time.sleep(WAIT)
+        try:
+            raw = rwscom.get_raw_slice(selection, start_i, end_i, session)
+            clean = rwsparse.parse_data(raw)
+            df = rwsparse.format_data(clean)
+        except Exception as e:
+            logging.debug(e)
+            continue
 
-            except Exception as e:
-                logging.debug(e)
-                continue
+        # Store data
+        dth.store_data(con, df)
 
-            # Store data
-            dth.store_data(con, df)
-
-            # Write data log
-            hvsq.write_log(
-                entry = f'{log_base}. Station: {name}; 'f'Number of points: {len(df)}', cnxn = con)
+        # Write data log
+        hvsq.write_log(
+            entry = f'{log_base}. Station: {name}; 'f'Number of points: {len(df)}', cnxn = con)
     return
 
 
