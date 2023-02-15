@@ -15,6 +15,7 @@ HVEC lab, 2023
 # Public packages
 import logging
 import datetime as dt
+import dateutil
 import requests
 import time
 from tqdm import tqdm
@@ -33,6 +34,32 @@ from hvec_support.bulk_importers import data_handling as dth
 START = '1680-1-1'
 END   = '2100-12-31'
 WAIT = 0
+
+
+def _crude_prune(location, session):
+    """
+    Limit the used date range based on data availability in
+    a crude but rapid procedure
+    """
+    start = dateutil.parser.parse(location['start'].squeeze())
+    end = dateutil.parser.parse(location['end'].squeeze())
+
+    end = min(end, dt.datetime.today())
+    location['end'] = end.strftime("%Y-%m-%d")
+
+    interval = end - start
+    middle = start + (interval / 2)
+
+    # Check lower half for data
+    data_present = rwscom.assert_data_available(location, start, middle, session)
+    if data_present:
+        return location
+    
+    # replace start date with middle date and repeat
+    location['start'] = middle.strftime("%Y-%m-%d")
+    location = _crude_prune(location, session)  # recursive call
+    return location
+
 
 def _get_chunk(selection, con):
     """
@@ -62,7 +89,17 @@ def _get_chunk(selection, con):
     # memory use is kept to a minimum
     session = requests.session()
 
-    date_range = rwshlp.date_series(START, END)
+    # Assert date range not empty
+    start = dateutil.parser.parse(selection['start'].squeeze())
+    end = dateutil.parser.parse(selection['end'].squeeze())
+    data_present = rwscom.assert_data_available(selection, start, end, session)
+    if not data_present:
+        session.close()
+        return
+
+    # Set date range, avoiding intervals void of data
+    selection = _crude_prune(selection, session)
+    date_range = rwshlp.date_series(selection['start'].squeeze(), selection['end'].squeeze())
     date_range = rwscom.prune_date_range(selection, date_range, session)
 
     for (start_i, end_i) in tqdm(date_range):
