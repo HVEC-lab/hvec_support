@@ -51,9 +51,9 @@ def _crude_prune(location, session):
 
     # Check lower half for data
     data_present = rwscom.assert_data_available(location, start, middle, session)
-    if data_present:
+    if data_present or (interval < dt.timedelta(days = 180)):
         return location
-    
+
     # replace start date with middle date and repeat
     location['start'] = middle.strftime("%Y-%m-%d")
     location = _crude_prune(location, session)  # recursive call
@@ -88,14 +88,6 @@ def _get_chunk(selection, con):
     # memory use is kept to a minimum
     session = requests.session()
 
-    # Assert date range not empty
-    start = dateutil.parser.parse(selection['start'].squeeze())
-    end = dateutil.parser.parse(selection['end'].squeeze())
-    data_present = rwscom.assert_data_available(selection, start, end, session)
-    if not data_present:
-        session.close()
-        return
-
     # Set date range, avoiding intervals void of data
     selection = _crude_prune(selection, session)
     date_range = rwshlp.date_series(selection['start'].squeeze(), selection['end'].squeeze())
@@ -120,9 +112,14 @@ def _get_chunk(selection, con):
     return
 
 
-def bulk_import(con, stations):
+def bulk_import(con, stations, start = START, end = END):
     """
     Bulk-importer RWS data.
+
+    Args:
+        con: database connection
+        station: dataframe with location data
+        start, end: start and end date as strings
     """
     global i, N, startTime
 
@@ -133,8 +130,8 @@ def bulk_import(con, stations):
     startTime = dt.datetime.now()
 
     stations.reset_index(inplace = True)
-    stations['start'] = START
-    stations['end']   = END
+    stations['start'] = start
+    stations['end']   = end
 
     # Grouping on code instead of name because we use package hvec_importers one
     # level deeper than the interface

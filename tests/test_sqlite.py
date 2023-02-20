@@ -62,6 +62,3 @@ def test_db_to_csv():
         assert os.path.exists(file)
         os.remove(file)
     return
-
-
-
