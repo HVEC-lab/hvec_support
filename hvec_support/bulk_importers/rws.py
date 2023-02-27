@@ -137,6 +137,7 @@ def bulk_import(con, stations, start = START, end = END):
 
     # Grouping on code instead of name because we use package hvec_importers one
     # level deeper than the interface
-    groups = stations.groupby(by = ['Code', 'Grootheid.Code'], as_index = True)
+    groups = stations.groupby(
+        by = ['Code', 'Grootheid.Code', 'Hoedanigheid.Code'], as_index = False)
     groups.apply(lambda x: _get_chunk(x, con = con))
     return
