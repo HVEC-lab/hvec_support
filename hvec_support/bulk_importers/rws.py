@@ -103,7 +103,8 @@ def _get_chunk(selection, con):
             logging.debug(e)
             continue
 
-        # Store data
+        # Store data after adding request properties to table
+        df[['Code', 'Grootheid']] = selection[['Code', 'Grootheid.Code']]
         dth.store_data(con, df)
 
         # Write data log
@@ -135,6 +136,6 @@ def bulk_import(con, stations, start = START, end = END):
 
     # Grouping on code instead of name because we use package hvec_importers one
     # level deeper than the interface
-    groups = stations.groupby(by = ['Code', 'Grootheid.Code'], as_index = False)
+    groups = stations.groupby(by = ['Code', 'Grootheid.Code'], as_index = True)
     groups.apply(lambda x: _get_chunk(x, con = con))
     return
