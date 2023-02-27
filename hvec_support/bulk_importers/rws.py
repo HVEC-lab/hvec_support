@@ -104,7 +104,8 @@ def _get_chunk(selection, con):
             continue
 
         # Store data after adding request properties to table
-        df[['Code', 'Grootheid']] = selection[['Code', 'Grootheid.Code']]
+        df['Code'] = selection['Code'].squeeze()
+        df['Grootheid'] = selection['Grootheid.Code'].squeeze()
         dth.store_data(con, df)
 
         # Write data log
