@@ -47,7 +47,7 @@ def _crude_prune(location, session):
     location['end'] = end.strftime("%Y-%m-%d")
 
     interval = end - start
-    middle = start + (interval / 2)
+    middle = start + (interval / 3)
 
     # Check lower half for data
     data_present = rwscom.assert_data_available(location, start, middle, session)
@@ -91,7 +91,7 @@ def _get_chunk(selection, con):
     # Set date range, avoiding intervals void of data
     selection = _crude_prune(selection, session)
     date_range = rwshlp.date_series(selection['start'].squeeze(), selection['end'].squeeze())
-    date_range = rwscom.prune_date_range(selection, date_range, session)
+    #date_range = rwscom.prune_date_range(selection, date_range, session)
 
     for (start_i, end_i) in tqdm(date_range):
         time.sleep(WAIT)
