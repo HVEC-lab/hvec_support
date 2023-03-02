@@ -209,6 +209,7 @@ def getColumnList(cnxn, table):
 
     return columnList
 
+
 #TODO create a tailor-made dataframe object
 def store_with_column_check(df, table, cnxn, **kwargs):
     """
