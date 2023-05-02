@@ -38,6 +38,19 @@ def set_column_width(worksheet):
     return
 
 
+def format_sheet(worksheet):
+    """
+    Set worksheet to single page landscape
+    """
+    pgs = worksheet.page_setup
+    pgs.orientation = worksheet.ORIENTATION_LANDSCAPE
+    pgs.paperSize = worksheet.PAPERSIZE_A4
+    #pgs.fitToHeight = True
+    #pgs.fitToWidth = True
+    pgs.fitToPage = True
+    return
+
+
 def set_column_width_writer(writer_object):
     """
     Set column widths of all sheets in an excel writer object
