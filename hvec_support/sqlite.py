@@ -117,7 +117,7 @@ def prepare_logLine(entry):
     date = dt.datetime.today().strftime('%Y-%m-%d %H:%M')
     machine = os.getenv('COMPUTERNAME')
 
-    logline = pd.DataFrame(columns = ['date', 'log entry', 'machine'])
+    logline = pd.DataFrame(columns = ['download_date', 'log_entry', 'machine'])
     logline = logline.append(
         dict(zip(logline.columns,[date, entry, machine])), ignore_index=True)
     return logline
