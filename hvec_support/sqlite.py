@@ -237,13 +237,20 @@ def store_with_column_check(df, table, cnxn, **kwargs):
     return
 
 
-def table_to_csv(name, cnxn, **kwargs):
+def table_to_csv(name, cnxn):
     """
     Integral export of selected table to csv
     """
     sql = f'SELECT * FROM {name}'
-    df = pd.read_sql(sql, cnxn)
-    df.to_csv(f'{name}.csv', **kwargs)
+    csv_file = f'{name}.csv'
+
+    header = True
+    mode = "w"
+    for df in pd.read_sql(sql, cnxn, chunksize = 100000):
+        df.to_csv(csv_file, mode = mode, header = header, index=False)
+        if header:
+            header = False
+            mode = "a"
     return
 
 
