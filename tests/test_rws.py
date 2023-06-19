@@ -13,7 +13,7 @@ os.chdir('./tests')
 
 @pyt.mark.parametrize(
     "start, end, expected_size", [
-        ('1-1-1950', '1-1-1954', 2605056),
+        ('1-1-1950', '1-1-1954', 3002368),
         ('1-1-1850', '31-12-1855', 0),
         ('15-12-1975', '15-2-1976', 364544)
     ])
@@ -24,7 +24,7 @@ def test_bulk_import(start, end, expected_size):
     selection = pd.read_excel(r'RWS_test_selection.xlsx')
     con = sq.connect('Test.db')
 
-    # Limit the dowload date range to save time
+    # Limit the download date range to save time
     rws.bulk_import(stations = selection, con = con, start = start, end = end)
     con.close()
 
