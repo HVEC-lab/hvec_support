@@ -49,5 +49,4 @@ def bulk_import(con, stations, freqs = ['annual']):
                     cnxn = con)
 
     session.close()
-    hvsq.remove_doubles(con, data)
     return
