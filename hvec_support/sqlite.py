@@ -238,12 +238,17 @@ def store_with_column_check(df, table, cnxn, **kwargs):
     return
 
 
-def table_to_csv(name, cnxn):
+def table_to_csv(table, db_file):
     """
     Integral export of selected table to csv
     """
-    sql = f'SELECT * FROM {name}'
-    csv_file = f'{name}.csv'
+    folder = os.path.splitext(db_file)[0]
+    sql = f'SELECT * FROM {table}'
+    csv_file = f'{table}.csv'
+
+    cnxn = sq.connect(db_file)
+    os.mkdir(folder)
+    os.chdir(folder)
 
     header = True
     mode = "w"

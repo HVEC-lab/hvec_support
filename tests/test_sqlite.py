@@ -36,13 +36,14 @@ def test_store_with_columns_check():
 
 
 def test_table_to_csv():
-    cnxn = sq.connect(':memory:')
+    FILE = 'test.db'
+    cnxn = sq.connect(FILE)
     df1.to_sql('test', cnxn, index = False)
 
-    hvsq.table_to_csv('test', cnxn)
+    hvsq.table_to_csv('test', FILE)
 
-    assert os.path.exists('test.csv')
-    os.remove('test.csv')
+    assert os.path.exists(r'./test/test.csv')
+    os.remove(r'./test/test.csv')
     return
 
 
