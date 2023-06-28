@@ -11,6 +11,7 @@ from hvec_support.bulk_importers import rws
 
 
 os.chdir('./tests')
+selection = pd.read_excel(r'RWS_test_selection.xlsx')
 
 @pyt.mark.parametrize(
     "start, end, expected_size", [
