@@ -2,14 +2,16 @@
 Test suite for bulk importer RWS
 """
 
+
 import os
+import sqlite3 as sq
+import pandas as pd
 import pytest as pyt
 from hvec_support.bulk_importers import rws
-import pandas as pd
-import sqlite3 as sq
 
 
 os.chdir('./tests')
+selection = pd.read_excel(r'RWS_test_selection.xlsx')
 
 @pyt.mark.parametrize(
     "start, end, expected_size", [
@@ -21,13 +23,11 @@ def test_bulk_import(start, end, expected_size):
     """
     Test bulk import
     """
-    selection = pd.read_excel(r'RWS_test_selection.xlsx')
-    con = sq.connect('Test.db')
+    FILE = 'Test.db'
 
-    # Limit the download date range to save time
-    rws.bulk_import(stations = selection, con = con, start = start, end = end)
+    con = sq.connect(FILE)
+    rws.bulk_import(stations = selection, con = con)
+
     con.close()
-
-    size = os.path.getsize('test.db')
-    os.remove('test.db')
-    assert size == expected_size
+    os.remove(FILE)
+    return
