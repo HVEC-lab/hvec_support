@@ -36,33 +36,49 @@ def test_store_with_columns_check():
 
 
 def test_table_to_csv():
-    FILE = 'test.db'
+    FILE = r'test.db'
+
     cnxn = sq.connect(FILE)
-    df1.to_sql('test', cnxn, index = False)
+    df1.to_sql('test', cnxn, index = False, if_exists = 'replace')
+    cnxn.close()
 
     hvsq.table_to_csv('test', FILE)
 
-    assert os.path.exists(r'./test/test.csv')
-    os.remove(r'./test/test.csv')
+    os.chdir(os.path.splitext(FILE)[0])
+    assert os.path.exists(r'test.csv')
+
+    os.remove(r'test.csv')
+    os.chdir('..')
+    os.rmdir(r'./test')
+    os.remove(FILE)
+
     return
 
 
 def test_db_to_csv():
-    cnxn = sq.connect(':memory:')
+    FILE = 'test.db'
+    BASE = os.getcwd()
+
+    cnxn = sq.connect(FILE)
 
     tables = ['test1', 'test2', 'test3']
 
     for tbl in tables:
         df1.to_sql(tbl, cnxn)  # Database with three tables
-    cnxn.commit()
+    cnxn.close()
 
-    hvsq.db_to_csv(cnxn)
+    hvsq.db_to_csv(FILE)
+    os.remove(FILE)
+
+    folder = os.path.splitext(FILE)[0]
+
+    os.chdir(folder)
 
     for tbl in tables:
         file = f'{tbl}.csv'
         assert os.path.exists(file)
         os.remove(file)
+    
+    os.chdir(BASE)
+    os.rmdir(folder)
     return
-
-
-

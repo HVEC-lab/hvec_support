@@ -241,34 +241,47 @@ def table_to_csv(table, db_file):
     """
     Integral export of selected table to csv
     """
+    BASE  = os.getcwd()
     folder = os.path.splitext(db_file)[0]
     sql = f'SELECT * FROM {table}'
     csv_file = f'{table}.csv'
 
     cnxn = sq.connect(db_file)
-    os.mkdir(folder)
+
+    if not os.path.exists(folder):  # When storing multiple tables, only create folder once
+        os.mkdir(folder)
+
     os.chdir(folder)
+    
+    if os.path.exists(csv_file):
+        os.remove(csv_file)  # Remove previous version, if present
 
     header = True
     mode = "w"
     for df in pd.read_sql(sql, cnxn, chunksize = 100000):
-        df.to_csv(csv_file, mode = mode, header = header, index=False)
+        df.to_csv(csv_file, mode = mode, header = header, index = False)
         if header:
             header = False
             mode = "a"
+
+    # Return files to initial state
+    os.chdir(BASE)
+    cnxn.close()
     return
 
 
-def db_to_csv(cnxn, **kwargs):
+def db_to_csv(db_file):
     """
     Copy all tables in a database to csv
 
     Args:
-        cnxn: database connection
+        db_file: database file name
     """
+    cnxn = sq.connect(db_file)
     table_list = getTableList(cnxn)
+    cnxn.close()
     
     for tbl in table_list:
-        table_to_csv(tbl, cnxn, **kwargs)
+        table_to_csv(tbl, db_file)
     return
  

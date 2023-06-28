@@ -7,6 +7,6 @@ from .admin import __author__, __author_email__, __version__
 
 from . import excel
 from . import sqlite
-from . import styles
+from . import general
 
 from . import bulk_importers
