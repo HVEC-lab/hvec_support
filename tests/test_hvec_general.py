@@ -21,15 +21,19 @@ def test_set_project_folder(project_name):
     Test changing work directory using only project number
     """
     project_number = project_name[0:8]
-    BASE = f'{os.getenv("ONEDRIVECOMMERCIAL")}/20 werk/'
+    BASE = os.getcwd()
+
+    TEST = f'{os.getenv("ONEDRIVECOMMERCIAL")}/20 werk/'
     
-    os.chdir(BASE)
-    os.mkdir(f'{BASE}{project_name}')
+    os.chdir(TEST)
+    os.mkdir(f'{TEST}{project_name}')
 
     general.set_project_folder(project_number)
 
     assert project_number in os.getcwd()
     
     os.chdir('..')
-    os.rmdir(f'{BASE}{project_name}')
+    os.rmdir(f'{TEST}{project_name}')
+
+    os.chdir(BASE)
     return

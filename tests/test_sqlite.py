@@ -36,6 +36,8 @@ def test_store_with_columns_check():
 
 
 def test_table_to_csv():
+    BASE = os.getcwd()
+    os.chdir('./tests')
     FILE = r'test.db'
 
     cnxn = sq.connect(FILE)
@@ -52,6 +54,7 @@ def test_table_to_csv():
     os.rmdir(r'./test')
     os.remove(FILE)
 
+    os.chdir(BASE)
     return
 
 
