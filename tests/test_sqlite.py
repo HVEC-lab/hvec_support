@@ -85,3 +85,8 @@ def test_db_to_csv():
     os.chdir(BASE)
     os.rmdir(folder)
     return
+
+
+def test_logline():
+    log = hvsq.prepare_logLine(entry = 'This is a test')
+    assert log.shape == (1, 3)
