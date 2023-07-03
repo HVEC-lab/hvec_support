@@ -1,6 +1,8 @@
 """
 Collection of selectors.
 
+Part of hvec_support/interactions
+
 HVEC lab, 2022
 """
 
@@ -44,7 +46,7 @@ def get_inputspecs_field_data():
                             filetypes = ['*.db', '*.sqlite', 'db', '.sqlite'])
 
     # Connect database and choose table
-    cnxn = sq.connect(out['file'], detect_types = True)
+    cnxn = sq.connect(out['file'], detect_types = False)
     tableList = hvsq.getTableList(cnxn)
 
     out['locationTable'] = gui.choicebox(
