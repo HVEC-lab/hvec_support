@@ -48,3 +48,13 @@ def set_project_folder(project_number):
             return
   
     raise ValueError(f'Project {project_number} not found')
+
+
+def show_progress(msg):
+    """
+    Show progress information
+    """
+    os.system('cls')
+    print(f"Currently running {os.path.basename(__file__)}")
+    print(msg)
+    return
