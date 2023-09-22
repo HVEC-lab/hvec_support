@@ -57,4 +57,5 @@ def show_progress(program, msg):
     os.system('cls')
     print(f"Currently running {program}")
     print(msg)
+    logging.info(msg)
     return
