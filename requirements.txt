@@ -6,3 +6,5 @@ numpy
 easygui
 openpyxl
 matplotlib
+hvec_importers @ git+https://github.com/hvec-lab/hvec_importers
+pytest

@@ -127,7 +127,7 @@ def write_log(entry, cnxn):
     """
     Update log in database.
 
-    info is a dictionary with log data. Solved in this way, the log info is flexible.
+    entry is a string.
     """
     logline = prepare_logLine(entry)
     logline.to_sql(con = cnxn, name = 'log', if_exists = 'append', index = False)
