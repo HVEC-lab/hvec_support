@@ -56,9 +56,6 @@ def initialise(name, replace = True, **kwargs):
     """
     Initialise a database. If an old version exists, it is deleted.
     Subsequently the database connection is opened and returned.
-
-    The function assumes an environment variable "DATAPATH" to exist,
-    containing the path to the location used to store data.
     """
     logging.info('Initialise database')
 
