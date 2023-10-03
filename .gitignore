@@ -77,3 +77,7 @@ hvec_support/bulk_importers/__pycache__/rws.cpython-311.pyc
 tests/Test.db
 hvec_support/__pycache__/general.cpython-311.pyc
 tests/__pycache__/test_hvec_general.cpython-311-pytest-7.2.1.pyc
+tests/__pycache__/test_excel.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_hvec_general.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_rws.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_sqlite.cpython-311-pytest-7.4.2.pyc
