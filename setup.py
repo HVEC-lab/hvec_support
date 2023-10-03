@@ -18,7 +18,7 @@ setup(
     long_description=long_description,
     license='MIT',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Stable',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Other Audience',
         'License :: OSI Approved :: MIT License',
@@ -27,17 +27,8 @@ setup(
         'Topic :: Scientific/Engineering'
     ],
     platforms='Windows',
-    install_requires=['numpy>=1.17',
-                      'matplotlib>=3.1',
-                      'pandas>=1.5',
-                      'scipy>=1.3',
-                      'openpyxl>=3.0',
-                      'tqdm>=4.0',
-                      'requests>=2.0',
-                      'datetime',
-                      'easygui',
-                      'openpyxl',
-                      'matplotlib',
-                      'hvec_importers @ git+https://github.com/HVEC-lab/hvec_importers'],
+    install_requires=[  'matplotlib'
+                      , 'pandas'
+                      , 'openpyxl'],
     packages=find_packages(exclude=[]),
 )
