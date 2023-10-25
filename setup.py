@@ -29,6 +29,8 @@ setup(
     platforms='Windows',
     install_requires=[  'matplotlib'
                       , 'pandas'
-                      , 'openpyxl'],
+                      , 'openpyxl'
+                      , 'geopandas'
+                      , 'contextily'],
     packages=find_packages(exclude=[]),
 )
