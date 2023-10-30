@@ -7,20 +7,33 @@ import geopandas as gpd
 import contextily as cx
 
 
-class labeled_map:
+def location_map(df, specs, margin = 0.01, **kwargs):
     """
-    Map from a table with location name, coordinates and coordinate system
-    used. This function transforms the coordinates to a geopandas dataframe, transforms
-    the coordinates to WGS 84 and plots the points on a map created with contextily
-    
+    Create labeled map from dataframe
+
     Args:
-    df: pandas dataframe with coordinates, name and coordinate system
-    col_spec: dictionary specifying the column names
-    source: contextily source to be used for the map
-    map_limit: spacing around the point cloud in lat/lon degrees
+    df: dataframe with name, x, y and coordinate system of x and y
+    specs: dictionary containing column specification
+    margin: margin around point cluster in degrees (lat/lon)
     """
-    def __init__(self, df, col_spec, source = cx.providers.OpenTopoMap, map_limit = 0.02):
-        x_col = col_spec['x']
-        y_col = col_spec['y']
-        name_col = col_spec['name']
-        print(name_col)
+    
+    # Bring settings to local variables 
+    name_col = specs['name']
+    x_col = specs['x']
+    y_col = specs['y']
+    coord_col = specs['coord']
+
+    # Create geopandas dataframe and transform coordinates
+    stations = (
+        gpd.GeoDataFrame(
+              df, geometry = gpd.points_from_xy(df[x_col], df[y_col])
+            , crs = df['coord_col'].unique().item()))
+    stations.to_crs('WGS84', inplace = True)
+
+    ax = stations.plot(figsize, color)
+    ax.set_xlim(min(stations.geometry.x) - margin, max(stations.geometry.x) + margin)
+    ax.set_ylim(min(stations.geometry.y) - margin, max(stations.geometry.y) + margin)
+    cx.add_basemap(ax, crs = stations.crs.to_string(), source = cx.providers.OpenTopoMap)
+    for x, y, label in zip(stations.geometry.x, stations.geometry.y, stations.Code):
+        ax.annotate(label, xy = (x, y), xytext = (3, 3), textcoords = 'offset points')
+    return

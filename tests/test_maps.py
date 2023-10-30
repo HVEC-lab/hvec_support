@@ -12,13 +12,25 @@ from hvec_support import maps
 
 
 test = pd.DataFrame(data = {
-      'name': 'OLV-toren Amersfoort'
-    , 'x': 155
-    , 'y' 463
+      'Naam': 'OLV-toren Amersfoort'
+    , 'X': 155
+    , 'Y': 463
     , 'stelsel': '25831'
-})
+}, index = [0])
+
+
+specification = {
+      'x': 'X'
+    , 'y': 'Y'
+    , 'name': 'Naam'
+    , 'coordinate_system': 'stelsel'
+}
 
 
 def test_map_creation():
-    print(test)
+    """
+    Test custom map
+    """
+    map = maps.LabeledMap()#df = test, col_spec = specification)
+    #map.show()
     return
