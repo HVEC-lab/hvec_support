@@ -8,3 +8,4 @@ from .admin import __author__, __author_email__, __version__
 from . import excel
 from . import sqlite
 from . import general
+from . import maps
