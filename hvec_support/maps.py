@@ -44,7 +44,7 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, **kwargs):
     stations.plot(ax = ax, **kwargs)
     for x, y, label in zip(stations.geometry.x, stations.geometry.y, stations[name_col]):
         ax.annotate(
-              label
+                label
               , xy = (x, y)
               , xytext = (10, 10)
               , textcoords = 'offset points'
