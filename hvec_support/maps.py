@@ -8,7 +8,7 @@ import geopandas as gpd
 import contextily as cx
 
 
-def location_map(df, col_spec, margin = 0.01, fontsize = 8, **kwargs):
+def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **kwargs):
     """
     Create labeled map from dataframe
 
@@ -42,12 +42,14 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, **kwargs):
     cx.add_basemap(ax, crs = stations.crs.to_string(), source = cx.providers.OpenTopoMap)
 
     stations.plot(ax = ax, **kwargs)
-    for x, y, label in zip(stations.geometry.x, stations.geometry.y, stations[name_col]):
+
+    if annotate:
+      for x, y, label in zip(stations.geometry.x, stations.geometry.y, stations[name_col]):
         ax.annotate(
-                label
-              , xy = (x, y)
-              , xytext = (10, 10)
-              , textcoords = 'offset points'
-              , backgroundcolor = 'white'
-              , fontsize = fontsize)
+            label
+          , xy = (x, y)
+          , xytext = (10, 10)
+          , textcoords = 'offset points'
+          , backgroundcolor = 'white'
+          , fontsize = fontsize)
     return fig
