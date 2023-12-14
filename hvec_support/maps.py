@@ -15,7 +15,7 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **k
     Args:
     df: dataframe with name, x, y and coordinate system of x and y
     specs: dictionary containing column specification
-    margin: margin around point cluster in degrees (lat/lon)
+    margin: scalar or two-element list, margin around point cluster in degrees (lat/lon)
     """
     
     # Bring settings to local variables 
@@ -24,6 +24,11 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **k
     y_col = col_spec['y']
     coord_col = col_spec['coordinate_system']
 
+    # Allow map margin to be set either as a scalar (used for x and y) or as
+    # an array, list or tuple. If given as scalar, transform to list
+    if isinstance(margin, (float, int)):  # Prevent error if margin is given without decimal point
+      margin = [margin, margin]
+
     # Create geopandas dataframe and transform coordinates
     stations = (
         gpd.GeoDataFrame(
@@ -31,10 +36,10 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **k
             , crs = df[coord_col].unique().item()))
     stations.to_crs('WGS84', inplace = True)
 
-    x_min = min(stations.geometry.x) - margin
-    x_max = max(stations.geometry.x) + margin
-    y_min = min(stations.geometry.y) - margin
-    y_max = max(stations.geometry.y) + margin
+    x_min = min(stations.geometry.x) - margin[0]
+    x_max = max(stations.geometry.x) + margin[0]
+    y_min = min(stations.geometry.y) - margin[1]
+    y_max = max(stations.geometry.y) + margin[1]
 
     fig, ax = plt.subplots()
     ax.set_xlim(x_min, x_max)

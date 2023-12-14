@@ -6,7 +6,8 @@ HVEC-lab, 2023
 
 import os
 import pandas as pd
-
+import pytest as pyt
+from matplotlib.figure import Figure
 
 from hvec_support import maps
 
@@ -27,13 +28,14 @@ specification = {
 }
 
 
-def test_map_creation_1():
+
+@pyt.mark.parametrize('margin', [0.01, [0.01, 0.02]])
+def test_map_creation_1(margin):
     """
     Test custom map
     """
-    map = maps.location_map(df = test, col_spec = specification, color = 'red')
-    map.show()
-    return
+    map = maps.location_map(df = test, margin = margin, col_spec = specification, color = 'red')
+    assert isinstance(map, Figure)
 
   
 def test_map_creation_2():
@@ -53,5 +55,5 @@ def test_map_creation_2():
     , 'coordinate_system': 'stelsel'
 }
     map = maps.location_map(df, col_spec = specification, color = 'red', marker = 'x', fontsize = 4)
-    map.show()
-    return
+    assert isinstance(map, Figure)
+  
