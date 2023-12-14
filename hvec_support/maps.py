@@ -14,7 +14,8 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **k
 
     Args:
     df: dataframe with name, x, y and coordinate system of x and y
-    specs: dictionary containing column specification
+    specs: dictionary containing column specification with at least the following keys (case sensitive):
+      'name', 'x', 'y', 'coordinate_system'
     margin: scalar or two-element list, margin around point cluster in degrees (lat/lon)
     """
     
