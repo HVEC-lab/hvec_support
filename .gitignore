@@ -82,3 +82,10 @@ tests/__pycache__/test_excel.cpython-311-pytest-7.4.2.pyc
 tests/__pycache__/test_hvec_general.cpython-311-pytest-7.4.2.pyc
 tests/__pycache__/test_maps.cpython-311-pytest-7.4.2.pyc
 tests/__pycache__/test_sqlite.cpython-311-pytest-7.4.2.pyc
+hvec_support/sqlite/__pycache__/__init__.cpython-311.pyc
+hvec_support/sqlite/__pycache__/db_info.cpython-311.pyc
+hvec_support/sqlite/__pycache__/db_operations.cpython-311.pyc
+hvec_support/sqlite/__pycache__/helpers.cpython-311.pyc
+tests/testdata.db
+tests/__pycache__/test_general.cpython-311-pytest-7.4.2.pyc
+hvec_support/sqlite/__pycache__/db_graph.cpython-311.pyc

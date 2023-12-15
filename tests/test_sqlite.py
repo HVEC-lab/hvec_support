@@ -8,6 +8,7 @@ import os
 import pytest as pyt
 import pandas as pd
 import sqlite3 as sq
+from matplotlib import pyplot as plt
 
 from hvec_support import sqlite as hvsq
 
@@ -29,9 +30,6 @@ def test_store_with_columns_check():
     hvsq.store_with_column_check(df2, 'test', cnxn, index = False)
 
     df = pd.read_sql('SELECT * FROM test', cnxn)
-    
-    #df.reset_index(drop = True, inplace = True)
-
     assert df.equals(df_expected)
 
 
@@ -67,7 +65,7 @@ def test_db_to_csv():
     tables = ['test1', 'test2', 'test3']
 
     for tbl in tables:
-        df1.to_sql(tbl, cnxn)  # Database with three tables
+        df1.to_sql(tbl, cnxn, if_exists = 'replace')  # Database with three tables
     cnxn.close()
 
     hvsq.db_to_csv(FILE)
@@ -90,3 +88,33 @@ def test_db_to_csv():
 def test_logline():
     log = hvsq.prepare_logLine(entry = 'This is a test')
     assert log.shape == (1, 3)
+
+
+def test_availability_table():
+    cnxn = sq.connect('./tests/testdata.db')
+
+    res = hvsq.availability_table(
+          table = 'const_yr'
+        , con = cnxn
+        , index =  'naam'
+        , columns = 'year'
+        , values = 'MHWS'
+    )
+
+    assert len(res.columns) == 171
+
+
+def test_availability_graph():
+    cnxn = sq.connect('./tests/testdata.db')
+
+    fig, ax = plt.subplots(figsize = (20, 8))
+
+    ax = hvsq.availability_graph(
+          table = 'const_yr'
+        , con = cnxn
+        , index =  'naam'
+        , columns = 'year'
+        , values = 'MHWS'
+    )
+
+    assert 'ax' in locals()

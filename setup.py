@@ -28,6 +28,7 @@ setup(
     ],
     platforms='Windows',
     install_requires=[  'matplotlib'
+                      , 'seaborn'
                       , 'pandas'
                       , 'openpyxl'
                       , 'geopandas'

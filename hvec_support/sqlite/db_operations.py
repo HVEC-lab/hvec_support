@@ -1,5 +1,7 @@
 """
-Module containing functions supporting the use of sqlite
+Sub-module of sqlite; operations on a database
+
+HVEC-lab, 2023
 """
 
 # Import general packages
@@ -9,25 +11,7 @@ import datetime as dt
 import sqlite3 as sq
 import pandas as pd
 
-
-def datetime_range(start, end, delta):
-    """
-    H.G. Voortman; 15-5-2020
-
-    Taken from 
-    https://stackoverflow.com/questions/10688006/generate-a-list-of-datetimes-between-an-interval
-    ===============================================================================
-    Modified to exporting an array of datetime
-    """
-    current = start
-    out = []
-    if not isinstance(delta, dt.timedelta):
-        delta = dt.timedelta(**delta)
-    while current < end:
-        out.append(current)
-        current += delta
-#        out = np.vstack((out, current))
-    return out
+from hvec_support.sqlite import db_info
 
 
 def connect_verbose(conn_str, *args, **kwargs):
@@ -172,41 +156,6 @@ def store_data(entity, data, log, **kwargs):
     return
 
 
-def getTableList(cnxn):
-    """
-    Get list of tables in a database.
-    Input is a database connection object made with sqlite3
-    """
-    sql = 'SELECT name from sqlite_master where type= "table"'
-    tableList = pd.read_sql(sql, cnxn)['name'].tolist()
-
-    return tableList
-
-
-def table_exists(table, cnxn):
-    """
-    Verify the existence of a table in a database
-
-    Args:
-        table: string with table name
-        cnxn: database connection
-    Out:
-        Boolean
-    """
-    sql = f'SELECT name FROM sqlite_master WHERE type = "table" AND name = "{table}"'
-    return len(cnxn.execute(sql).fetchall()) == 1
-
-
-def getColumnList(cnxn, table):
-    """
-    Get list of columns in a specified table
-    """
-    sql = "SELECT * FROM '%s' ORDER BY ROWID ASC LIMIT 1"%table
-    columnList = pd.read_sql(sql, cnxn).columns.tolist()
-
-    return columnList
-
-
 #TODO create a tailor-made dataframe object
 def store_with_column_check(df, table, cnxn, **kwargs):
     """
@@ -217,7 +166,7 @@ def store_with_column_check(df, table, cnxn, **kwargs):
     """
     logging.info('Storing table with added possibly extra columns')
 
-    if table_exists(table, cnxn):
+    if db_info.table_exists(table, cnxn):
         # Check for missing columns
         sql = f"PRAGMA table_info({table})"
         cols_db = pd.read_sql(sql, cnxn)['name'].tolist()
@@ -276,7 +225,7 @@ def db_to_csv(db_file):
         db_file: database file name
     """
     cnxn = sq.connect(db_file)
-    table_list = getTableList(cnxn)
+    table_list = db_info.getTableList(cnxn)
     cnxn.close()
     
     for tbl in table_list:
