@@ -62,3 +62,21 @@ def availability_table(table, con, index, columns, values):
     df = df.pivot(index = index, columns = columns, values = 'cnt')
     return df
 
+
+def number_of_duplicates(cnxn, table, columns):
+    """
+    Show number of duplicates in specified table
+    and columns.
+
+    Args:
+        cnxn, object: database connection
+        table, string: target table
+        columns, list: columns for which doubles are to be avoided
+    """
+    col_string = ', '.join(columns)
+    subSql = f"SELECT MAX(rowid) FROM {table} GROUP BY {col_string}"  # Select last entry
+    sql = f"SELECT rowid FROM {table} WHERE rowid NOT IN ({subSql})"
+
+    res = len(cnxn.execute(sql).fetchall())
+    return res
+ 
