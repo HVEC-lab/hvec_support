@@ -179,7 +179,7 @@ def store_with_column_check(df, table, cnxn, **kwargs):
             sql = f'ALTER TABLE {table} ADD "%s" '%col
             cnxn.execute(sql)
 
-    df.to_sql(name = table, con = cnxn, if_exists = 'append', **kwargs)
+    df.to_sql(name = table, con = cnxn, **kwargs)
     cnxn.commit()
     return
 
