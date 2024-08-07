@@ -4,8 +4,33 @@ scripts and excel.
 """
 
 # In[10] Modules
+import os
 import openpyxl as xl
 import pandas as pd
+
+
+def import_excel_files(names):
+    """
+    Import multiple Excel files in a single dataframe.
+
+    Args:
+    names: list of file names including path
+
+    Returns:
+    df: dataframe with all imported data
+    """
+    # Create empty results dataframe
+    df = pd.DataFrame()
+
+    for nm in names:
+
+        # Read current file
+        tmp = pd.read_excel(nm)
+
+        # Combine with earlier data
+        df = pd.concat([df, tmp])
+    
+    return df
 
 
 # In[100] Formatting Excel files
