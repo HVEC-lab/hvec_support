@@ -9,7 +9,7 @@ import openpyxl as xl
 import pandas as pd
 
 
-def import_excel_files(names):
+def import_excel_files(names, **kwargs):
     """
     Import multiple Excel files in a single dataframe.
 
@@ -25,7 +25,7 @@ def import_excel_files(names):
     for nm in names:
 
         # Read current file
-        tmp = pd.read_excel(nm)
+        tmp = pd.read_excel(nm, **kwargs)
 
         # Combine with earlier data
         df = pd.concat([df, tmp])
