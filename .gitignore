@@ -90,3 +90,5 @@ tests/testdata.db
 tests/__pycache__/test_general.cpython-311-pytest-7.4.2.pyc
 hvec_support/sqlite/__pycache__/db_graph.cpython-311.pyc
 hvec_support/__pycache__/pd_support.cpython-311.pyc
+hvec_support/__pycache__/__init__.cpython-313.pyc
+hvec_support/__pycache__

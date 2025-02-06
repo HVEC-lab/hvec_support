@@ -1,5 +1,7 @@
 matplotlib
+seaborn
 openpyxl
 pandas
 geopandas
 contextily
+pytest

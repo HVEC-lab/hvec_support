@@ -37,7 +37,7 @@ def set_project_folder(project_number):
     Change working directory to the project folder based on the
     HVEC project number
     """
-    BASE = f'{os.getenv("ONEDRIVECOMMERCIAL")}/20 werk/'
+    BASE = f'{os.getenv("ONEDRIVE")}/20 werk/'
     os.chdir(BASE)
 
     names = os.listdir()

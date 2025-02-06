@@ -23,7 +23,7 @@ def test_set_project_folder(project_name):
     project_number = project_name[0:8]
     BASE = os.getcwd()
 
-    TEST = f'{os.getenv("ONEDRIVECOMMERCIAL")}/20 werk/'
+    TEST = f'{os.getenv("ONEDRIVE")}/20 werk/'
     
     os.chdir(TEST)
     os.mkdir(f'{TEST}{project_name}')
