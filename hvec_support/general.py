@@ -7,6 +7,7 @@ import logging
 import datetime as dt
 import locale as loc
 import matplotlib.pyplot as plt
+import time
 
 # In[15] Set plot format
 SMALL_SIZE = 16
@@ -59,3 +60,19 @@ def show_progress(program, msg):
     print(msg)
     logging.info(msg)
     return
+
+
+def timer_func(func):
+    """
+    This function shows the execution time of 
+    the function object passed.
+
+    Use as a decorator.
+    """
+    def wrap_func(*args, **kwargs):
+        t1 = time.time()
+        result = func(*args, **kwargs)
+        t2 = time.time()
+        print(f'Function {func.__name__!r} executed in {(t2-t1):.4f}s')
+        return result
+    return wrap_func
