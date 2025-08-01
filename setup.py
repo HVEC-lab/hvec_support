@@ -15,7 +15,7 @@ setup(
     author_email = admin['__author_email__'],
     description = 'Python package boosting conultancy work '
                 'with Python, sqlite and excel.',
-    long_description=long_description,
+    #long_description=long_description,
     license='MIT',
     classifiers=[
         'Development Status :: 5 - Stable',
