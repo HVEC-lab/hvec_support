@@ -58,4 +58,4 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **k
           , textcoords = 'offset points'
           , backgroundcolor = 'white'
           , fontsize = fontsize)
-    return fig
+    return fig, ax
