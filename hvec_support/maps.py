@@ -45,7 +45,7 @@ def location_map(df, col_spec, margin = 0.01, fontsize = 8, annotate = True, **k
     fig, ax = plt.subplots()
     ax.set_xlim(x_min, x_max)
     ax.set_ylim(y_min, y_max)
-    cx.add_basemap(ax, crs = stations.crs.to_string())#, source = cx.providers.OpenTopoMap)
+    cx.add_basemap(ax, crs = stations.crs.to_string(), **kwargs)#, source = cx.providers.OpenTopoMap)
 
     stations.plot(ax = ax, **kwargs)
 
