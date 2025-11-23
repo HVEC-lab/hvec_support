@@ -32,6 +32,8 @@ setup(
                       , 'pandas'
                       , 'openpyxl'
                       , 'geopandas'
-                      , 'contextily'],
+                      , 'contextily'
+                      , 'requests'
+                      , 'bs4'],
     packages=find_packages(exclude=[]),
 )
