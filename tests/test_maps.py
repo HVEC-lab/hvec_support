@@ -35,7 +35,7 @@ def test_map_creation_1(margin):
     Test custom map
     """
     map = maps.location_map(df = test, margin = margin, col_spec = specification, color = 'red')
-    assert isinstance(map, Figure)
+    assert isinstance(map[0], Figure)
 
   
 def test_map_creation_2():
@@ -55,5 +55,5 @@ def test_map_creation_2():
     , 'coordinate_system': 'stelsel'
 }
     map = maps.location_map(df, col_spec = specification, color = 'red', marker = 'x', fontsize = 4)
-    assert isinstance(map, Figure)
+    assert isinstance(map[0], Figure)
   
