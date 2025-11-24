@@ -24,7 +24,8 @@ def listhtml(url, ext=''):
     page = requests.get(url).text
     soup = BeautifulSoup(page, 'html.parser')
     res = [
-        url + '/' + node.get('href') 
+        #url + '/' + 
+        node.get('href') 
         for node in soup.find_all('a') 
         if node.get('href').endswith(ext)
         ]
