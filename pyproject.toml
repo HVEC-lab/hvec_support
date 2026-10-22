@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hvec_support"
+dynamic = ["version"]
+description = "Python package boosting consultancy work with Python, sqlite and excel."
+readme = {file = "Readme.rst", content-type = "text/x-rst"}
+license = "LicenseRef-Proprietary"
+license-files = ["LICENSE.txt"]
+authors = [{name = "Hessel Voortman Engineering Consultancy", email = "hessel@hesselvoortman.nl"}]
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Other Audience",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: SQL",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "contextily",
+    "geopandas",
+    "matplotlib",
+    "openpyxl",
+    "pandas",
+    "requests",
+    "seaborn",
+    "beautifulsoup4",
+]
+
+[project.urls]
+Homepage = "https://github.com/HVEC-lab/hvec_support"
+Repository = "https://github.com/HVEC-lab/hvec_support"
+
+[dependency-groups]
+test = ["pytest"]
+dev = [
+    {include-group = "test"},
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "hvec_support.admin.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["hvec_support*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "network: tests that use live web services (run with -m network)",
+]
+# Offline by default; -m network replaces this choice
+addopts = '-m "not network"'

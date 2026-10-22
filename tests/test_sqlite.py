@@ -5,12 +5,15 @@ HVEC, 2022
 """
 
 import os
+from pathlib import Path
 import pytest as pyt
 import pandas as pd
 import sqlite3 as sq
 from matplotlib import pyplot as plt
 
 from hvec_support import sqlite as hvsq
+
+TESTS = Path(__file__).parent
 
 
 data = {'Name': ['Arthur', 'Merlin', 'Lancelot'], 'Age': [62, 87, 46]}
@@ -35,7 +38,7 @@ def test_store_with_columns_check():
 
 def test_table_to_csv():
     BASE = os.getcwd()
-    os.chdir('./tests')
+    os.chdir(TESTS)
     FILE = r'test.db'
 
     cnxn = sq.connect(FILE)
@@ -59,6 +62,7 @@ def test_table_to_csv():
 def test_db_to_csv():
     FILE = 'test.db'
     BASE = os.getcwd()
+    os.chdir(TESTS)
 
     cnxn = sq.connect(FILE)
 
@@ -81,7 +85,7 @@ def test_db_to_csv():
         os.remove(file)
     
     os.chdir(BASE)
-    os.rmdir(folder)
+    os.rmdir(TESTS / folder)
     return
 
 
@@ -91,7 +95,7 @@ def test_logline():
 
 
 def test_availability_table():
-    cnxn = sq.connect('./tests/testdata.db')
+    cnxn = sq.connect(TESTS / 'testdata.db')
 
     res = hvsq.availability_table(
           table = 'const_yr'
@@ -105,7 +109,7 @@ def test_availability_table():
 
 
 def test_availability_graph():
-    cnxn = sq.connect('./tests/testdata.db')
+    cnxn = sq.connect(TESTS / 'testdata.db')
 
     fig, ax = plt.subplots(figsize = (20, 8))
 

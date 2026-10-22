@@ -9,6 +9,7 @@ import pytest as pyt
 
 from hvec_support import html_helpers as hthlp
 
+@pyt.mark.network
 @pyt.mark.parametrize(
           'url, ext'
         , [

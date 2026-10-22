@@ -1,5 +1,9 @@
-hvec_support/__pycache__/
-tests/__pycache__/
-.gitignore
-hvec_support/bulk_importers/__pycache__/
-hvec_support/sqlite/__pycache__/
+.venv/
+__pycache__/
+*.pyc
+*.egg-info
+build/
+dist/
+.pytest_cache/
+.coverage
+docs/_build/

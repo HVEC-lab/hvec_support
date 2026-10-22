@@ -5,6 +5,7 @@ HVEC-lab, 2023
 """
 
 import os
+from pathlib import Path
 import pandas as pd
 import pytest as pyt
 from matplotlib.figure import Figure
@@ -42,9 +43,7 @@ def test_map_creation_2():
     """
     Create map of RD-net points
     """
-    path = r'./tests'
-    file = r'RD_kernnet_2021.xlsx'
-    file = os.path.join(path, file)
+    file = Path(__file__).parent / 'RD_kernnet_2021.xlsx'
     df = pd.read_excel(file)
     df['stelsel'] = '28992'
 
